@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ratingBar">
+        <item name="android:foregroundTint">@color/yellow</item>
+        <item name="android:indeterminateTint">#FDD835</item>
+        <item name="android:progressTint">#FDD835</item>
+
+    </style>
+</resources>

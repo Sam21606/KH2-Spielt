@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/quizWeiterOnline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="weiter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFrageQuiz">
+
+        <ToggleButton
+            android:id="@+id/buttonAnswer4Online"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Antwort 4"
+            android:textOff="Antwort 4"
+            android:textOn="Antwort 4"
+            app:layout_constraintEnd_toEndOf="@+id/buttonAnswer3Online"
+            app:layout_constraintStart_toStartOf="@+id/buttonAnswer3Online"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer3Online" />
+
+        <ToggleButton
+            android:id="@+id/buttonAnswer3Online"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Antwort 3"
+            android:textOff="Antwort 3"
+            android:textOn="Antwort 3"
+            app:layout_constraintEnd_toEndOf="@+id/buttonAnswer2Online"
+            app:layout_constraintStart_toStartOf="@+id/buttonAnswer2Online"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer2Online" />
+
+        <ToggleButton
+            android:id="@+id/buttonAnswer2Online"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Antwort 2"
+            android:textOff="Antwort 2"
+            android:textOn="Antwort 2"
+            app:layout_constraintEnd_toEndOf="@+id/buttonAnswer1Online"
+            app:layout_constraintStart_toStartOf="@+id/buttonAnswer1Online"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer1Online" />
+
+        <ToggleButton
+            android:id="@+id/buttonAnswer1Online"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Antwort 1"
+            android:textOff="Antwort 1"
+            android:textOn="Antwort 1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textViewFrageQuiz"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="64dp"
+        android:text="Hier Steht eine Frage, der Text ist nur länger um das zu Simulieren?"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

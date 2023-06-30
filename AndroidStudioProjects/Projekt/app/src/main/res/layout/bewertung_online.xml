@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RatingBar
+        android:id="@+id/ratingBewertung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundTint="#FDD835"
+        android:indeterminateTint="#FDD835"
+        android:progressTint="#FDD835"
+        app:layout_constraintBottom_toTopOf="@+id/WeiterButtonBewertung1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInputVonMitspieler" />
+
+    <TextView
+        android:id="@+id/textViewBewertungErklärung"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Nun werden die beiden Lösungen vorgestellt und du kann eine Punktevergabe von 1-5 Punktenvornehmen. Durch die Chattingoption könnt iht miteinander chatten und erhalten so die Möglichkeit sich über die Lösungen auszutauschen. Es werden nur ganze Sterne Vergeben."
+        app:layout_constraintEnd_toEndOf="@+id/ratingBewertung"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ratingBewertung"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/WeiterButtonBewertung1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="96dp"
+        android:text="Lösung anfragen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewInputVonMitspieler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Noch hat dein Mitspieler keine Lösung eingegeben"
+        app:layout_constraintEnd_toEndOf="@+id/textViewBewertungErklärung"
+        app:layout_constraintStart_toStartOf="@+id/textViewBewertungErklärung"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBewertungErklärung" />
+</androidx.constraintlayout.widget.ConstraintLayout>

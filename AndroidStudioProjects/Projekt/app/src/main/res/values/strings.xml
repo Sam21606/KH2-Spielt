@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Projekt</string>
+    <string name="topic_text">Euer Thema ist: %1$S</string>
+</resources>
