@@ -13,7 +13,7 @@ class ThemaErgebnis : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.thema_ergebniss)
+        setContentView(R.layout.thema_ergebnis)
 
         init()
     }

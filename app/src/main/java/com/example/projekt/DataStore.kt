@@ -30,7 +30,7 @@ object DataStore {
             )
 
             db.collection("Games").document("$gameID")
-                .update(answer)
+               .update(answer)
         } else {
 
             val answer: MutableMap<String, Any> = hashMapOf(

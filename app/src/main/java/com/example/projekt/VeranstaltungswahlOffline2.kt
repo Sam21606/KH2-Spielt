@@ -44,13 +44,13 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
     fun init() {
         readIntent()
         var textName2 = findViewById<TextView>(R.id.textViewSpieler1online)
-        continueVeranstaltung = findViewById<Button>(R.id.continueVeranstaltung)
-        checkTheater = findViewById<CheckBox>(R.id.checkTheater)
-        checkLesung = findViewById<CheckBox>(R.id.checkLesung)
-        checkKonzert = findViewById<CheckBox>(R.id.checkKonzert)
-        checkPerformance = findViewById<CheckBox>(R.id.checkPerformance)
-        checkOper = findViewById<CheckBox>(R.id.checkOper)
-        checkAusstellung = findViewById<CheckBox>(R.id.checkAusstellung)
+        continueVeranstaltung = findViewById(R.id.continueVeranstaltung)
+        checkTheater = findViewById(R.id.checkTheater)
+        checkLesung = findViewById(R.id.checkLesung)
+        checkKonzert = findViewById(R.id.checkKonzert)
+        checkPerformance = findViewById(R.id.checkPerformance)
+        checkOper = findViewById(R.id.checkOper)
+        checkAusstellung = findViewById(R.id.checkAusstellung)
         checkAusstellung.setOnClickListener {
             checkboxCheck()
         }
@@ -92,11 +92,9 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
         } else {
             checkIfThemaMatch()
             giveTopic()
-            println("222${DataStore.topic}")
-            val intent = Intent(this, ThemaErgebnis::class.java).also {
-                println("Die Themen zur Auswahl sind $themaSet")
-            }
-            startActivity(intent)
+            println("2234235623237312724776465656346 234613461346134622${DataStore.topic}")
+            val intent2 = Intent(this, ThemaErgebnis::class.java)
+            startActivity(intent2)
         }
     }
 
