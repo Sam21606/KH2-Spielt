@@ -3,6 +3,7 @@ package com.example.projekt
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
+    lateinit var answer: MutableMap<String, Any>
     var gameMode: Boolean = false
     var playerName1: String = ""
     var playerName2: String = ""
@@ -22,27 +23,25 @@ object DataStore {
     var db = FirebaseFirestore.getInstance()
     fun addGameDataToFirestore() {
         if (player1OR2) {
-            val answer: MutableMap<String, Any> = hashMapOf(
+            answer = hashMapOf(
                 "playerName1" to playerName1,
                 "topic" to topic,
                 "currentPoints1" to "$currentPoints1",
                 "questionsPicked" to "$questionsPicked",
             )
-
-            db.collection("Games").document("$gameID")
-               .update(answer)
         } else {
 
-            val answer: MutableMap<String, Any> = hashMapOf(
+            answer = hashMapOf(
                 "playerName2" to "$playerName2",
                 "topic" to "$topic",
                 "currentPoints2" to "$currentPoints2",
                 "questionsPicked" to "$questionsPicked",
             )
-
-            db.collection("Games").document("$gameID")
-                .update(answer)
         }
+        updateAnswerInDB()
     }
 }
-
+    fun updateAnswerInDB(){
+        DataStore.db.collection("Games").document("${DataStore.gameID}")
+            .update(DataStore.answer)
+    }

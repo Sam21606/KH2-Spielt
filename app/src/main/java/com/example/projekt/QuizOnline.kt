@@ -14,19 +14,24 @@ class QuizOnline : AppCompatActivity() {
     private lateinit var buttonAnswer3Online: ToggleButton
     private lateinit var buttonAnswer4Online: ToggleButton
     private lateinit var textViewFrageQuiz: TextView
-    var answered1 = false
-    var answered2 = false
-    var answered3 = false
-    var answered4 = false
+    var answer = false
+    var pointsInQuiz = 0
     var questionNumber = 1
     var choosedQuestion = 4//Spieler gewählte Anzahl an Fragen
     var questionID: String = ""
+    var clickedAnswerID = "0"
+    lateinit var answer1Id: String
+    lateinit var answer2Id: String
+    lateinit var answer3Id: String
+    lateinit var answer4Id: String
     lateinit var questionText: String
     lateinit var answer1Text: String
     lateinit var answer2Text: String
     lateinit var answer3Text: String
     lateinit var answer4Text: String
     private var questionsChosen = mutableListOf<String>("")
+    val matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
+    val matchAnswersText = matchedAnswers.map { it.text }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,51 +40,63 @@ class QuizOnline : AppCompatActivity() {
         init()
     }
 
-    private fun init() {
+    fun init() {
 
         DataStore.stage = 3
-        quizWeiterOnline = findViewById<Button>(R.id.quizWeiterOnline)
-        buttonAnswer1Online = findViewById<ToggleButton>(R.id.buttonAnswer1Online)
-        buttonAnswer2Online = findViewById<ToggleButton>(R.id.buttonAnswer2Online)
-        buttonAnswer3Online = findViewById<ToggleButton>(R.id.buttonAnswer3Online)
-        buttonAnswer4Online = findViewById<ToggleButton>(R.id.buttonAnswer4Online)
-        textViewFrageQuiz = findViewById<TextView>(R.id.textViewFrageQuiz)
-        selectQuestion()
+        quizWeiterOnline = findViewById(R.id.quizWeiterOnline)
+        buttonAnswer1Online = findViewById(R.id.buttonAnswer1Online)
+        buttonAnswer2Online = findViewById(R.id.buttonAnswer2Online)
+        buttonAnswer3Online = findViewById(R.id.buttonAnswer3Online)
+        buttonAnswer4Online = findViewById(R.id.buttonAnswer4Online)
+        textViewFrageQuiz = findViewById(R.id.textViewFrageQuiz)
         quizWeiterOnline.setOnClickListener {
             nextQuestion()
         }
         buttonAnswer1Online.setOnClickListener {
-            answerClicked()
+            nextQuestion()
         }
         buttonAnswer2Online.setOnClickListener {
-            answerClicked()
+            nextQuestion()
         }
         buttonAnswer3Online.setOnClickListener {
-            answerClicked()
+            nextQuestion()
         }
         buttonAnswer4Online.setOnClickListener {
-            answerClicked()
+            nextQuestion()
         }
 
     }
 
-    private fun answerClicked() {
-        // sezte alle anderen buttons auf off
+    fun oneQuestion(){
+        selectQuestion()
+        answerClicked()
+        addPoints()
     }
 
-    fun checkAnswer() {
-        //überprüft welche antwort
+    fun answerClicked() {
+        TODO()
+        // sezte alle anderen buttons auf off
+        checkAnswer()
     }
 
     fun nextQuestion() {
 
         if (questionNumber == choosedQuestion + 1) {
+            addQuizpoints()
             val intent = Intent(this, Spielbrett::class.java)
             startActivity(intent)
         } else {
             selectQuestion()
         }
 
+    }
+
+    fun addQuizpoints() {
+        if (DataStore.player1OR2){
+            DataStore.currentPoints1 += pointsInQuiz
+        }else {
+            DataStore.currentPoints2 += pointsInQuiz
+        }
     }
 
     fun selectQuestion() {
@@ -95,10 +112,6 @@ class QuizOnline : AppCompatActivity() {
     }
 
     fun setTextEtcToChosenQuestio() {
-
-
-        val matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
-        val matchAnswersText = matchedAnswers.map { it.text }
         questionsChosen.add(questionID)
 
         answer1Text = matchAnswersText[0]
@@ -128,4 +141,30 @@ class QuizOnline : AppCompatActivity() {
         println("$questionID $questionText")
         textViewFrageQuiz.text = questionText
     }
+    fun checkAnswer(){
+        val answersId = matchedAnswers.map{ it.ID}
+        answer1Id = answersId[0]
+        answer2Id = answersId[1]
+        answer3Id = answersId[2]
+        answer4Id = answersId[3]
+        val choosenanswer = matchedAnswers.filter{ clickedAnswerID == it.ID}
+        answer = choosenanswer.map { it.correct }
+    }
+
+    fun addPoints(){
+        if (answer) {
+            pointsInQuiz +=1
+            answerResultCorerct()
+        }else {
+            answerResultFalse()
+        }
+    }
+    fun answerResultCorerct(){
+        TODO()
+    }
+
+    fun answerResultFalse(){
+        TODO()
+    }
+
 }
