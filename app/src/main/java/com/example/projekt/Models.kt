@@ -8,5 +8,6 @@ data class Question(
 data class Answer(
     val ID: String,
     val _QuestionID: String,
-    val text: String
+    val text: String,
+    val correct: String
 )

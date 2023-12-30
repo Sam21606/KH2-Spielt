@@ -71,7 +71,8 @@ class MainActivity : AppCompatActivity() {
                         Answer(
                             text = document.data["Text"].toString(),
                             ID = document.data["ID"].toString(),
-                            _QuestionID = document.data["_QuestionId"].toString()
+                            _QuestionID = document.data["_QuestionId"].toString(),
+                            correct = document.data["correct"].toString()
                         )
                     )
                     println(DataStore.answers)
@@ -90,7 +91,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts[it],
-                "_QuestionId" to "Gx80PliwZ5SgxAg71N85"
+                "_QuestionId" to "Gx80PliwZ5SgxAg71N85",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -103,7 +105,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts2[it],
-                "_QuestionId" to "HVNAmGic19IL9XOvr38Q"
+                "_QuestionId" to "HVNAmGic19IL9XOvr38Q",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -116,7 +119,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts3[it],
-                "_QuestionId" to "Z6gG8U231q8q57QgiV0X"
+                "_QuestionId" to "Z6gG8U231q8q57QgiV0X",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -129,7 +133,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts4[it],
-                "_QuestionId" to "WXH0mfjh7SOYi4MNuit0"
+                "_QuestionId" to "WXH0mfjh7SOYi4MNuit0",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++

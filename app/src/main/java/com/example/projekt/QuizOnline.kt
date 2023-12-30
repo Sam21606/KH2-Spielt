@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 
+
 class QuizOnline : AppCompatActivity() {
     lateinit var quizWeiterOnline: Button
     private lateinit var buttonAnswer1Online: ToggleButton
@@ -14,24 +15,22 @@ class QuizOnline : AppCompatActivity() {
     private lateinit var buttonAnswer3Online: ToggleButton
     private lateinit var buttonAnswer4Online: ToggleButton
     private lateinit var textViewFrageQuiz: TextView
-    var answer = false
     var pointsInQuiz = 0
     var questionNumber = 1
     var choosedQuestion = 4//Spieler gewählte Anzahl an Fragen
     var questionID: String = ""
     var clickedAnswerID = "0"
-    lateinit var answer1Id: String
-    lateinit var answer2Id: String
-    lateinit var answer3Id: String
-    lateinit var answer4Id: String
     lateinit var questionText: String
     lateinit var answer1Text: String
     lateinit var answer2Text: String
     lateinit var answer3Text: String
     lateinit var answer4Text: String
-    private var questionsChosen = mutableListOf<String>("")
+    private var questionsChosen = mutableListOf("")
     val matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
     val matchAnswersText = matchedAnswers.map { it.text }
+    val matchAnswersId = matchedAnswers.map { it.ID }
+    var choosenanswer = matchedAnswers.filter{ clickedAnswerID == it.ID}
+    var correctAnswer = matchedAnswers.filter { it.correct == "true" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,30 +52,39 @@ class QuizOnline : AppCompatActivity() {
             nextQuestion()
         }
         buttonAnswer1Online.setOnClickListener {
-            nextQuestion()
+            button1Clicked()
         }
         buttonAnswer2Online.setOnClickListener {
-            nextQuestion()
+            button2Clicked()
         }
         buttonAnswer3Online.setOnClickListener {
-            nextQuestion()
+            button3Clicked()
         }
         buttonAnswer4Online.setOnClickListener {
-            nextQuestion()
+            button4Clicked()
         }
 
     }
 
-    fun oneQuestion(){
+    fun oneQuestion(){buttonAnswer2Online.setOnClickListener {
+        nextQuestion()
+    }
         selectQuestion()
-        answerClicked()
         addPoints()
     }
 
-    fun answerClicked() {
-        TODO()
-        // sezte alle anderen buttons auf off
-        checkAnswer()
+
+    private fun button1Clicked() {
+        clickedAnswerID = matchAnswersId[0]
+    }
+    private fun button2Clicked() {
+        clickedAnswerID = matchAnswersId[1]
+    }
+    private fun button3Clicked() {
+        clickedAnswerID = matchAnswersId[2]
+    }
+    private fun button4Clicked() {
+        clickedAnswerID = matchAnswersId[3]
     }
 
     fun nextQuestion() {
@@ -86,7 +94,7 @@ class QuizOnline : AppCompatActivity() {
             val intent = Intent(this, Spielbrett::class.java)
             startActivity(intent)
         } else {
-            selectQuestion()
+            oneQuestion()
         }
 
     }
@@ -134,25 +142,16 @@ class QuizOnline : AppCompatActivity() {
     }
 
     fun chooseNewRandomQuestion() {
-        var random: Int = (0 until (DataStore.questions.size)).random()
+        val random: Int = (0 until (DataStore.questions.size)).random()
         questionID = DataStore.questions[random].ID
         questionText = DataStore.questions[random].text
 
         println("$questionID $questionText")
         textViewFrageQuiz.text = questionText
     }
-    fun checkAnswer(){
-        val answersId = matchedAnswers.map{ it.ID}
-        answer1Id = answersId[0]
-        answer2Id = answersId[1]
-        answer3Id = answersId[2]
-        answer4Id = answersId[3]
-        val choosenanswer = matchedAnswers.filter{ clickedAnswerID == it.ID}
-        answer = choosenanswer.map { it.correct }
-    }
 
     fun addPoints(){
-        if (answer) {
+        if (choosenanswer == correctAnswer) {
             pointsInQuiz +=1
             answerResultCorerct()
         }else {
