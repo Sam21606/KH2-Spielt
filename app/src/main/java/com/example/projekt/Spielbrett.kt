@@ -30,6 +30,7 @@ class Spielbrett : AppCompatActivity() {
     }
 
     private fun init() {
+        DataStore.logQuestionAnswers()
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
         infoButton = findViewById(R.id.infoButton)
         chatButton = findViewById(R.id.chatButton)

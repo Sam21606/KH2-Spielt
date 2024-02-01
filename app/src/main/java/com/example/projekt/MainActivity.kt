@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun init() {
+    fun init() {
         startButton = findViewById(R.id.startButton)
         startButton.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
             println("&&$test &&2")
         }
-        logQuestionAnswers()
+        DataStore.logQuestionAnswers()
         test()
 
     }
@@ -48,37 +48,7 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
     }
 
-    fun logQuestionAnswers() {
-        val docRef = db.collection("Question")
-        docRef.get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    DataStore.questions.add(
-                        Question(
-                            text = document.data["text"].toString(),
-                            ID = document.data["ID"].toString()
-                        )
-                    )
-                    Log.d(TAG, "${document.id}=>${document.data["text"]}")
-                    println("${DataStore.questions} ")
-                }
-            }
-        val docAns = db.collection("Answer")
-        docAns.get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    DataStore.answers.add(
-                        Answer(
-                            text = document.data["Text"].toString(),
-                            ID = document.data["ID"].toString(),
-                            _QuestionID = document.data["_QuestionId"].toString(),
-                            correct = document.data["correct"].toString()
-                        )
-                    )
-                    println(DataStore.answers)
-                }
-            }
-    }
+
 
     fun createAnswers() {
 
