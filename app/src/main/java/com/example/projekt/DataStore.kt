@@ -46,34 +46,32 @@ object DataStore {
         updateAnswerInDB()
     }
     fun logQuestionAnswers() {
-        var db = FirebaseFirestore.getInstance()
-        println("Ich wurde ausgeführt")
-        val docRef = db.collection("Question")
-        docRef.get()
+        var db = FirebaseFirestore.getInstance()// bekommt Instanz vo DB
+        val docRef = db.collection("Question") // bekommt path zur richtigen collection
+        docRef.get() // lädt diese collection herunter
             .addOnFailureListener {
-                println("wir haben einen fail")
+                println("wir haben einen fail beim Herunterladen")
             }
+            //Prüft auf success/Fail
             .addOnSuccessListener {
-                    result ->
+                    result ->//führt für alle heruntergeladenen Werte folgendes aus
                 for (document in result) {
-                    questions.add(
+                    questions.add(// fügt die Werte zur Variable questions hinzu
                         Question(
                             text = document.data["text"].toString(),
                             ID = document.data["ID"].toString()
                         )
                     )
-                    Log.d(ContentValues.TAG, "${document.id}=>${document.data["text"]}")
+                    //Biete einen Stelle zum Prüfen
+                    //Log.d(ContentValues.TAG, "${document.id}=>${document.data["text"]}")
                     println("das sind die questions das wurde ausgeführt$questions ")
-                    println("nächster Test")
                 }
-                println("Wir haben succeses")
             }
-        println("irgendentwas ist weird")
-        val docAns = db.collection("Answer")
-        docAns.get()
+        val docAns = db.collection("Answer")// bekommt path zur richtigen collection
+        docAns.get()// lädt diese collection herunter
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    answers.add(
+                    answers.add(// fügt die Werte zur Variable answers hinzu
                         Answer(
                             ID = document.data["ID"].toString(),
                             text = document.data["Text"].toString(),
@@ -81,7 +79,6 @@ object DataStore {
                             correct = document.data["correct"].toString()
                         )
                     )
-                    println(answers)
                     println("nächster Test $answers")
                 }
                 answersInApp += 1
