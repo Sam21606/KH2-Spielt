@@ -98,6 +98,8 @@ class VeranstaltungswahlOffline1 : AppCompatActivity() {
                 it.putExtra("Ausstellung", ausstellung1)
                 it.putExtra("Konzert", konzert1)
                 startActivity(it)
+
+                println(" 1$lesung1, $konzert1, $performance1, $ausstellung1, $theater1, $oper1")
             }
             startActivity(intent)
         }
