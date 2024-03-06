@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun init() {
+    fun init() {
         startButton = findViewById(R.id.startButton)
         startButton.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
             println("&&$test &&2")
         }
-        logQuestionAnswers()
+        DataStore.logQuestionAnswers()
         test()
 
     }
@@ -48,36 +48,7 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
     }
 
-    fun logQuestionAnswers() {
-        val docRef = db.collection("Question")
-        docRef.get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    DataStore.questions.add(
-                        Question(
-                            text = document.data["text"].toString(),
-                            ID = document.data["ID"].toString()
-                        )
-                    )
-                    Log.d(TAG, "${document.id}=>${document.data["text"]}")
-                    println("${DataStore.questions} ")
-                }
-            }
-        val docAns = db.collection("Answer")
-        docAns.get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    DataStore.answers.add(
-                        Answer(
-                            text = document.data["Text"].toString(),
-                            ID = document.data["ID"].toString(),
-                            _QuestionID = document.data["_QuestionId"].toString()
-                        )
-                    )
-                    println(DataStore.answers)
-                }
-            }
-    }
+
 
     fun createAnswers() {
 
@@ -90,7 +61,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts[it],
-                "_QuestionId" to "Gx80PliwZ5SgxAg71N85"
+                "_QuestionId" to "Gx80PliwZ5SgxAg71N85",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -103,7 +75,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts2[it],
-                "_QuestionId" to "HVNAmGic19IL9XOvr38Q"
+                "_QuestionId" to "HVNAmGic19IL9XOvr38Q",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -116,7 +89,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts3[it],
-                "_QuestionId" to "Z6gG8U231q8q57QgiV0X"
+                "_QuestionId" to "Z6gG8U231q8q57QgiV0X",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++
@@ -129,7 +103,8 @@ class MainActivity : AppCompatActivity() {
             val answer: MutableMap<String, Any> = hashMapOf(
                 "ID" to "$counter",
                 "Text" to texts4[it],
-                "_QuestionId" to "WXH0mfjh7SOYi4MNuit0"
+                "_QuestionId" to "WXH0mfjh7SOYi4MNuit0",
+                "correct" to "false"
             )
             addAnswerToDb(answer)
             counter++

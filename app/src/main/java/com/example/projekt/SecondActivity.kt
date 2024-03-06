@@ -1,10 +1,12 @@
 package com.example.projekt
 
 import android.app.Dialog
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
@@ -12,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import com.example.projekt.DataStore.db
 
 class SecondActivity : AppCompatActivity() {
 
@@ -57,11 +60,23 @@ class SecondActivity : AppCompatActivity() {
             val intent = Intent(this, OnlineVerbindung::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {
+            createFirebaseGame()
             val intent2 = Intent(this, VeranstaltungswahlOffline1::class.java)
             startActivity(intent2)
         } else {
             popoutNoName()
         }
+    }
+
+    private fun createFirebaseGame() {
+        val games: MutableMap<String, Any> = hashMapOf(
+        )
+        db.collection("Games")
+            .add(games)
+            .addOnSuccessListener { documentReference ->
+                Log.d(ContentValues.TAG, documentReference.id)
+                DataStore.gameID = documentReference.id
+            }
     }
 
     private fun popoutNoName() {

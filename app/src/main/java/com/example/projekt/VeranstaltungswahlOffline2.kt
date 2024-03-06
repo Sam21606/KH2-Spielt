@@ -32,7 +32,6 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
     lateinit var checkPerformance: CheckBox
     lateinit var checkOper: CheckBox
     lateinit var checkAusstellung: CheckBox
-    lateinit var textName2 : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +43,7 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
 
     fun init() {
         readIntent()
-        textName2 = findViewById<TextView>(R.id.textViewSpieler1online)
+        var textName2 = findViewById<TextView>(R.id.textViewSpieler1online)
         continueVeranstaltung = findViewById<Button>(R.id.continueVeranstaltung)
         checkTheater = findViewById<CheckBox>(R.id.checkTheater)
         checkLesung = findViewById<CheckBox>(R.id.checkLesung)
@@ -75,7 +74,6 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
         }
         textName2.text = DataStore.playerName2
     }
-
 
     private fun showPopoutIfNotChoosed() {
         if (ausstellung2 == false && lesung2 == false && konzert2 == false && oper2 == false && performance2 == false && theater2 == false) {
@@ -164,7 +162,5 @@ class VeranstaltungswahlOffline2 : AppCompatActivity() {
         konzert1 = intent.getBooleanExtra("Konzert", false)
         ausstellung1 = intent.getBooleanExtra("Ausstellung", false)
         lesung1 = intent.getBooleanExtra("Performance", false)
-
-        println(" $lesung1, $konzert1, $performance1, $ausstellung1, $theater1, $oper1")
     }
 }

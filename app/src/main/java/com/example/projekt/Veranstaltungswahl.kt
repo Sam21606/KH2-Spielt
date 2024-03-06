@@ -85,7 +85,6 @@ class Veranstaltungswahl : AppCompatActivity() {
     fun checkWhatTopicMatches() {
         if (theater1 && theater2) {
             themaSet.add("Theater")
-            println("yasssssssssssssssssssssssssssssssss")
         }
         if (oper1 && oper2) {
             themaSet.add("Oper")
