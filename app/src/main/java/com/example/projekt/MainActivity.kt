@@ -12,8 +12,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : AppCompatActivity() {
 
 
-    lateinit var startButton: Button
-    lateinit var test: String
+    private lateinit var startButton: Button
+    private lateinit var test: String
     var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         startButton.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
-            println("&&$test &&2")
         }
         DataStore.logQuestionAnswers()
         test()

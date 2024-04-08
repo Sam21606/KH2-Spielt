@@ -1,16 +1,14 @@
 package com.example.projekt
 
-import android.content.ContentValues
-import android.util.Log
 import com.example.projekt.DataStore.db
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
     lateinit var answer: MutableMap<String, Any>
     var gameMode: Boolean = true
-    var playerName1: String = "asd"
-    var playerName2: String = "123"
-    var topic: String = "oper"
+    var playerName1: String = ""
+    var playerName2: String = ""
+    var topic: String = ""
     var stage: Int = 2
     var rating1 = 0
     var rating2 = 0
@@ -23,6 +21,7 @@ object DataStore {
     var gameID = "Y1of7QZJof5CkV7Bi5Uj"
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
     var answersInApp = 0
+    var gameData: MutableMap<String, Any> = hashMapOf()
 
 
     var db = FirebaseFirestore.getInstance()
@@ -45,8 +44,15 @@ object DataStore {
         }
         updateAnswerInDB()
     }
+
+    fun getDatastoreData(){
+        val docRef = db.collection("Games").document(gameID)
+        docRef.addSnapshotListener{ snapshot, _ ->
+            gameID = snapshot?.get("gameID") as? String ?: ""
+
+        }
+    }
     fun logQuestionAnswers() {
-        var db = FirebaseFirestore.getInstance()// bekommt Instanz vo DB
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
         docRef.get() // lädt diese collection herunter
             .addOnFailureListener {
@@ -79,15 +85,23 @@ object DataStore {
                             correct = document.data["correct"].toString()
                         )
                     )
-                    println("nächster Test $answers")
                 }
                 answersInApp += 1
             }
 
     }
+
+    fun createGame() {
+
+        db.collection("Games")
+            .add(gameData)
+            .addOnSuccessListener { documentReference ->
+                gameID = documentReference.id
+            }
+    }
 }
     fun updateAnswerInDB(){
-        db.collection("Games").document("${DataStore.gameID}")
+        db.collection("Games").document(DataStore.gameID)
             .update(DataStore.answer)
     }
 

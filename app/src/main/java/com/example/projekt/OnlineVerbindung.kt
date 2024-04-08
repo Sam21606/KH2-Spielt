@@ -1,27 +1,24 @@
 package com.example.projekt
 
-import android.content.ContentValues
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 
 
 class OnlineVerbindung : AppCompatActivity() {
     var db = FirebaseFirestore.getInstance()
     lateinit var buttonConnectGame: Button
-    lateinit var textViewIDContainer: TextView
     lateinit var buttonCreateGame: Button
     lateinit var editTextIDInput: EditText
     var buttonCreateGameClicked = 0
-    var isEmpty = true
+    lateinit var clipboardManager: ClipboardManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,83 +28,60 @@ class OnlineVerbindung : AppCompatActivity() {
     }
 
     private fun init() {
-        textViewIDContainer = findViewById(R.id.textViewIDContainer)
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         buttonCreateGame = findViewById(R.id.buttonCreateGame)
         buttonConnectGame = findViewById(R.id.buttonConnectGame)
         editTextIDInput = findViewById(R.id.editTextIDInput)
         buttonCreateGame.setOnClickListener {
+            DataStore.gameData = hashMapOf(
+                "playerName1" to DataStore.playerName1,
+                "gameID" to DataStore.gameID
+            )
+            DataStore.createGame()
             DataStore.player1OR2 = true// Spieler true wenn er das Game erstellt
             makeGame()
         }
         buttonConnectGame.setOnClickListener {
-            checkIfGameisThere()
-            DataStore.player1OR2 = false// Spieler false wenn er dem Game beitritt
+            if (buttonCreateGameClicked == 0){
+                checkIfGameisThere()
+                DataStore.player1OR2 = false// Spieler false wenn er dem Game beitritt
+            }else{
+                val intent = Intent(this, Veranstaltungswahl::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     fun makeGame() {
         if (buttonCreateGameClicked == 0) {
-            savePlayer1DataToFirestore()
-            buttonCreateGame.text = "ID anzeigen"
+            buttonCreateGame.text = "Kopiere ID"
             buttonCreateGameClicked = 1
             buttonConnectGame.visibility = View.INVISIBLE
         } else if (buttonCreateGameClicked == 1) {
-            TextChangerWithDelay()
-            SaveGameIDToGame()
-            buttonCreateGame.text = "Game Starten"
+            buttonConnectGame.text = "Game Starten"
             buttonCreateGameClicked = 2
-        } else if (buttonCreateGameClicked == 2) {
-            val intent = Intent(this, Veranstaltungswahl::class.java)
-            startActivity(intent)
+            buttonConnectGame.visibility = View.VISIBLE
+            val clipData = ClipData.newPlainText("ID", DataStore.gameID)
+            clipboardManager.setPrimaryClip(clipData)
         }
     }
+
 
     fun checkIfGameisThere() {
+        editTextIDInput.visibility = View.VISIBLE
+        buttonConnectGame.text = "ID Prüfen"
+        db.collection("Games").document(editTextIDInput.text.toString())
+            .get()
+            .addOnSuccessListener {result ->
+                if (result != null){
+                    DataStore.gameID = editTextIDInput.text.toString()
 
-        if (buttonCreateGameClicked == 0) {
-            editTextIDInput.visibility = View.VISIBLE
-            db.collection("Games").whereEqualTo("GameID", editTextIDInput.text.toString())
-                .limit(1).get()
-                .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        isEmpty = task.result.isEmpty
-                        println(isEmpty)
-                    }
-                })
-            if (!isEmpty) {
-                DataStore.gameID = editTextIDInput.text.toString()
-                val intent = Intent(this, Veranstaltungswahl::class.java)
-                startActivity(intent)
 
-            } else {
-                println("FEHLER")
+                    val intent = Intent(this, Veranstaltungswahl::class.java)
+                    startActivity(intent)
+
+                }
+
             }
-        }
     }
-
-
-    fun savePlayer1DataToFirestore() {
-        val games: MutableMap<String, Any> = hashMapOf(
-        )
-        db.collection("Games")
-            .add(games)
-            .addOnSuccessListener { documentReference ->
-                Log.d(ContentValues.TAG, documentReference.id)
-                DataStore.gameID = documentReference.id
-            }
-
-    }
-
-    fun SaveGameIDToGame() {
-        val gameID: MutableMap<String, Any> = hashMapOf(
-            "GameID" to DataStore.gameID
-        )
-        db.collection("Games").document(DataStore.gameID)
-            .update(gameID)
-    }
-
-    fun TextChangerWithDelay() {
-        textViewIDContainer.text = DataStore.gameID
-    }
-
 }

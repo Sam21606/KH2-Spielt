@@ -1,12 +1,10 @@
 package com.example.projekt
 
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
@@ -14,17 +12,14 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import com.example.projekt.DataStore.db
 
 class SecondActivity : AppCompatActivity() {
 
-    lateinit var toggleButton: Button
-    lateinit var textName1: EditText
-    lateinit var textName2: EditText
-    lateinit var settingButton: ImageButton
-    lateinit var gameStartButton: Button
-    lateinit var spielerName1: String
-    lateinit var spielerName2: String
+    private lateinit var toggleButton: ToggleButton
+    private lateinit var textName1: EditText
+    private lateinit var textName2: EditText
+    private lateinit var settingButton: ImageButton
+    private lateinit var gameStartButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +28,11 @@ class SecondActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        toggleButton = findViewById<ToggleButton>(R.id.toggleButton)
-        textName1 = findViewById<EditText>(R.id.textName1)
-        textName2 = findViewById<EditText>(R.id.textName2)
-        settingButton = findViewById<ImageButton>(R.id.SettingsButton)
-        gameStartButton = findViewById<Button>(R.id.gameStartButton)
+        toggleButton = findViewById(R.id.toggleButton)
+        textName1 = findViewById(R.id.textName1)
+        textName2 = findViewById(R.id.textName2)
+        settingButton = findViewById(R.id.SettingsButton)
+        gameStartButton = findViewById(R.id.gameStartButton)
         settingButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
@@ -51,32 +46,18 @@ class SecondActivity : AppCompatActivity() {
     }
 
     private fun goToVeranstaltungswahl() {
-        spielerName1 = textName1.text.toString()
-        spielerName2 = textName2.text.toString()
-        DataStore.playerName1 = spielerName1
-        DataStore.playerName2 = spielerName2
+        DataStore.playerName1 = textName1.text.toString()
+        DataStore.playerName2 = textName2.text.toString()
         onlineOfflinechanger()
         if (DataStore.gameMode && DataStore.playerName1 != "") {
             val intent = Intent(this, OnlineVerbindung::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {
-            createFirebaseGame()
             val intent2 = Intent(this, VeranstaltungswahlOffline1::class.java)
             startActivity(intent2)
         } else {
             popoutNoName()
         }
-    }
-
-    private fun createFirebaseGame() {
-        val games: MutableMap<String, Any> = hashMapOf(
-        )
-        db.collection("Games")
-            .add(games)
-            .addOnSuccessListener { documentReference ->
-                Log.d(ContentValues.TAG, documentReference.id)
-                DataStore.gameID = documentReference.id
-            }
     }
 
     private fun popoutNoName() {
@@ -98,7 +79,6 @@ class SecondActivity : AppCompatActivity() {
         if (toggleButton.text.toString() == "Offline") {
             DataStore.gameMode = false
             textName2.visibility = View.VISIBLE
-            println("Visible")
         } else if (toggleButton.text.toString() == "Online") {
             textName2.visibility = View.INVISIBLE
             DataStore.gameMode = true

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Projekt</string>
     <string name="topic_text">Euer Thema ist: %1$S</string>
+    <string name="topic">Hier steht das Thema</string>
+    <string name="continue_text">Weiter</string>
+    <string name="problem">Nun bekommt ihr ein offensichtliches und mögliches Problem . Du musst dir eine Lösung zu dieser Situation überlegen und in die Eingabefläche tippen, die im später Schritt erscheint.</string>
+    <string name="culture">Erfahrung mit Kultur</string>
+    <string name="culture_introduction">Nun ist eure efahrung mit der Kultur gefragt. Ihr habt nun etwas Zeit, um Geschichten zu Kultur zuerzählen. Diese werden dann im Anschluss von eurem Mitspieler bewertet.</string>
 </resources>

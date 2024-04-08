@@ -175,7 +175,6 @@ class Veranstaltungswahl : AppCompatActivity() {
                     lesung2 = document.getString("lesung2").toBoolean()
                     konzert2 = document.getString("konzert2").toBoolean()
                     performance2 = document.getString("performance2").toBoolean()
-                    println("succcssca+isbfa0eiÜP^DOSGVÜ89IOD#BGFVÄOIADGVLwgiu&&")
                     popoutWhenNoInputElseNewLayout()
                 }
         } else {
