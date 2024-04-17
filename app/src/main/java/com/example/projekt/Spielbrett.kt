@@ -49,7 +49,7 @@ class Spielbrett : AppCompatActivity() {
             startIntent(Chat::class.java)
         }
         homeButton.setOnClickListener {
-            startIntent(SecondActivity::class.java)
+            startIntent(PlayerConfig::class.java)
 
         }
         infoButton.setOnClickListener {

@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".PlayerConfig"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -125,6 +125,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SpielbrettOnline"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".EreignisskarteOffline"
             android:exported="true">
             <intent-filter>
@@ -149,7 +157,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnlineVerbindung"
+            android:name=".OnlineConnection"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

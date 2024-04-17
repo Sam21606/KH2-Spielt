@@ -1,6 +1,5 @@
 package com.example.projekt
 
-import com.example.projekt.DataStore.db
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
@@ -9,16 +8,16 @@ object DataStore {
     var playerName1: String = ""
     var playerName2: String = ""
     var topic: String = ""
-    var stage: Int = 2
+    var stage = 1
     var rating1 = 0
     var rating2 = 0
-    var currentPoints1 = 1
-    var currentPoints2 = 1
+    var currentPoints1 = 0
+    var currentPoints2 = 0
     var questionsPicked = mutableListOf<Any>("2","123")
     val questions = mutableListOf<Question>()
     val answers = mutableListOf<Answer>()
 
-    var gameID = "Y1of7QZJof5CkV7Bi5Uj"
+    var gameID = ""
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
     var answersInApp = 0
     var gameData: MutableMap<String, Any> = hashMapOf()
@@ -30,16 +29,16 @@ object DataStore {
             answer = hashMapOf(
                 "playerName1" to playerName1,
                 "topic" to topic,
-                "currentPoints1" to "$currentPoints1",
-                "questionsPicked" to "$questionsPicked",
+                "currentPoints1" to currentPoints1,
+                "questionsPicked" to questionsPicked,
             )
         } else {
 
             answer = hashMapOf(
-                "playerName2" to "$playerName2",
-                "topic" to "$topic",
-                "currentPoints2" to "$currentPoints2",
-                "questionsPicked" to "$questionsPicked",
+                "playerName2" to playerName2,
+                "topic" to topic,
+                "currentPoints2" to currentPoints2,
+                "questionsPicked" to questionsPicked,
             )
         }
         updateAnswerInDB()
@@ -52,6 +51,7 @@ object DataStore {
 
         }
     }
+
     fun logQuestionAnswers() {
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
         docRef.get() // lädt diese collection herunter
@@ -68,9 +68,6 @@ object DataStore {
                             ID = document.data["ID"].toString()
                         )
                     )
-                    //Biete einen Stelle zum Prüfen
-                    //Log.d(ContentValues.TAG, "${document.id}=>${document.data["text"]}")
-                    println("das sind die questions das wurde ausgeführt$questions ")
                 }
             }
         val docAns = db.collection("Answer")// bekommt path zur richtigen collection
@@ -92,17 +89,19 @@ object DataStore {
     }
 
     fun createGame() {
-
         db.collection("Games")
             .add(gameData)
             .addOnSuccessListener { documentReference ->
                 gameID = documentReference.id
+                updateAnswerInDB()
             }
     }
-}
+
     fun updateAnswerInDB(){
-        db.collection("Games").document(DataStore.gameID)
-            .update(DataStore.answer)
+        db.collection("Games").document(gameID)
+            .update(answer)
     }
+}
+
 
 

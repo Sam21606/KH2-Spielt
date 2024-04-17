@@ -1,11 +1,7 @@
 package com.example.projekt
 
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.RatingBar
 import android.widget.TextView
@@ -27,7 +23,6 @@ class BewertungOnline : AppCompatActivity() {
     }
 
     private fun init() {
-        DataStore.stage = 2
         ratingBewertung = findViewById(R.id.ratingBewertung)
         buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung1)
         textViewInputVonMitspieler = findViewById(R.id.textViewInputVonMitspieler)
@@ -38,20 +33,8 @@ class BewertungOnline : AppCompatActivity() {
 
     private fun checkBewertung() {
         DataStore.rating1 = ratingBewertung.rating.toInt()
-        println("${DataStore.rating1}")
         if (DataStore.rating1 == 0 && buttonWeiterBewertung.text != "Lösung anfragen") {
-            val popoutNoName =
-                layoutInflater.inflate(R.layout.popout_keine_bewertung_gegeben, null)
-            val popout = Dialog(this)
-            popout.setContentView(popoutNoName)
-            popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-            popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-            popout.show()
-            val popoutButton = popoutNoName.findViewById<Button>(R.id.popoutButton)
-            popoutButton.setOnClickListener {
-                popout.dismiss()
-            }
+
         } else {
             checkIfThereIsPlayerinput()
         }
@@ -60,13 +43,13 @@ class BewertungOnline : AppCompatActivity() {
     fun addPointsForRating() {
         if (DataStore.player1OR2) {
             val storyText1: MutableMap<String, Any> = hashMapOf(
-                "currentpoints2" to DataStore.rating1,
+                "currentpoints2" to DataStore.rating1 + DataStore.currentPoints2,
             )
             db.collection("Games").document(DataStore.gameID)
                 .update(storyText1)
         } else {
             val storyText1: MutableMap<String, Any> = hashMapOf(
-                "currentpoints1" to DataStore.rating1,
+                "currentpoints1" to DataStore.rating1 + DataStore.currentPoints1,
             )
             db.collection("Games").document(DataStore.gameID)
                 .update(storyText1)

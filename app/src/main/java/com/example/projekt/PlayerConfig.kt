@@ -13,7 +13,7 @@ import android.widget.ImageButton
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 
-class SecondActivity : AppCompatActivity() {
+class PlayerConfig : AppCompatActivity() {
 
     private lateinit var toggleButton: ToggleButton
     private lateinit var textName1: EditText
@@ -23,7 +23,7 @@ class SecondActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.second_activity)
+        setContentView(R.layout.player_config)
         init()
     }
 
@@ -50,7 +50,7 @@ class SecondActivity : AppCompatActivity() {
         DataStore.playerName2 = textName2.text.toString()
         onlineOfflinechanger()
         if (DataStore.gameMode && DataStore.playerName1 != "") {
-            val intent = Intent(this, OnlineVerbindung::class.java)
+            val intent = Intent(this, OnlineConnection::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {
             val intent2 = Intent(this, VeranstaltungswahlOffline1::class.java)

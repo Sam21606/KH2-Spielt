@@ -18,19 +18,11 @@ class WartenAufMitspieler : AppCompatActivity() {
     }
 
     private fun init() {
-        buttonWeiterMitspielerWarten = findViewById(R.id.buttonWeiterMitspielerWarten)
-        buttonWeiterMitspielerWarten.setOnClickListener {
-            checkIfNewInput()
-        }
-    }
-
-    private fun checkIfNewInput() {
-        val docRef = db.collection("Games").document(DataStore.gameID)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                DataStore.topic = document.getString("topic").toString()
+        db.collection("Games").document(DataStore.gameID)
+            .addSnapshotListener{snapshot, _ ->
+                DataStore.topic = snapshot?.get("topic").toString()
+                getInput()
             }
-        getInput()
     }
 
     private fun getInput() {

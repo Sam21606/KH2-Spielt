@@ -75,7 +75,7 @@ class VeranstaltungswahlOffline1 : AppCompatActivity() {
     }
 
     fun checkboxCheck() {
-        if (playerToCheck == 1){
+        if (playerToCheck == 0){
             ausstellung1 = checkAusstellung.isChecked
             lesung1 = checkLesung.isChecked
             konzert1 = checkKonzert.isChecked
@@ -94,15 +94,18 @@ class VeranstaltungswahlOffline1 : AppCompatActivity() {
     }
 
     fun popoutWhenNoInput() {
-        if (ausstellung1 == false && lesung1 == false && konzert1 == false && oper1 == false && performance1 == false && theater1 == false) {
+        if (playerToCheck == 0 && ausstellung1 == false && lesung1 == false && konzert1 == false && oper1 == false && performance1 == false && theater1 == false) {
             popout()
-        } else if (playerToCheck == 0){
+        }else if (playerToCheck == 0){
             checkAusstellung.isChecked = false
             checkLesung.isChecked= false
             checkKonzert.isChecked= false
             checkOper.isChecked= false
             checkPerformance.isChecked= false
             checkTheater.isChecked= false
+            playerToCheck = 1
+        }else if(ausstellung2 == false && lesung2 == false && konzert2 == false && oper2 == false && performance2 == false && theater2 == false){
+            popout()
         }else {
             checkIfThemaMatch()
             val intent2 = Intent(this, ThemaErgebnis::class.java)

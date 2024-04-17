@@ -24,7 +24,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
-        android:text="Hier kannst du dich mit deinem Mitspieler verbinden. Dafür brauchst du eine verbindung via Chat zu deinem Mitspieler. Einer von euch beiden muss ein Game erstellen und die ID die auf dem Bildschirm erscheint dem gegenüber zuschicken. Diese muss dann in das Text-Feld eingegeben werden."
+        android:text="@string/connection_explained"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewÜberschriftConnect" />
@@ -43,7 +43,7 @@
             android:id="@+id/buttonCreateGame"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Game erstellen"
+            android:text="@string/create_game"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Game Beitreten"
+            android:text="@string/conenct_to_game"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonCreateGame" />
@@ -64,11 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="ID"
+        android:hint="@string/id_input"
         android:inputType="text"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="290dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintVertical_bias="0.141" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

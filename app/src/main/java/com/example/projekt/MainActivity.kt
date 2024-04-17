@@ -27,11 +27,11 @@ class MainActivity : AppCompatActivity() {
     fun init() {
         startButton = findViewById(R.id.startButton)
         startButton.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
+            val intent = Intent(this, PlayerConfig::class.java)
             startActivity(intent)
         }
-        DataStore.logQuestionAnswers()
-        test()
+        //DataStore.logQuestionAnswers()
+        //test()
 
     }
 

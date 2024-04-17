@@ -23,8 +23,13 @@ class ThemaErgebnis : AppCompatActivity() {
         textThemaErgebnis = findViewById(R.id.TextThemaErgebnis)
         textThemaErgebnis.text = getString(R.string.topic_text, DataStore.topic)
         buttonThema.setOnClickListener {
+        if (DataStore.gameMode) {
+            val intent = Intent(this, SpielbrettOnline::class.java)
+            startActivity(intent)
+        }else{
             val intent = Intent(this, Spielbrett::class.java)
             startActivity(intent)
+        }
         }
         DataStore.addGameDataToFirestore()
     }

@@ -116,21 +116,14 @@ class Veranstaltungswahl : AppCompatActivity() {
             if (!theater2 && !oper2 && !ausstellung2 && !lesung2 && !konzert2 && !performance2) {
                 val intent = Intent(this, WartenAufMitspieler::class.java)
                 startActivity(intent)
-                println("$theater2 && $oper2 && $ausstellung2 && $lesung2 && $konzert2 && $performance2")
-                println("$theater1 && $oper1 && $ausstellung1 && $lesung1 && $konzert1 && $performance1")
             } else {
-                println("$theater2 && $oper2 && $ausstellung2 && $lesung2 && $konzert2 && $performance2")
                 checkWhatTopicMatches()
             }
         } else {
             if (!theater1 && !oper1 && !ausstellung1 && !lesung1 && !konzert1 && !performance1) {
                 val intent = Intent(this, WartenAufMitspieler::class.java)
                 startActivity(intent)
-                println("$theater2 && $oper2 && $ausstellung2 && $lesung2 && $konzert2 && $performance2")
-                println("$theater1 && $oper1 && $ausstellung1 && $lesung1 && $konzert1 && $performance1")
             } else {
-                println("$theater2 && $oper2 && $ausstellung2 && $lesung2 && $konzert2 && $performance2")
-                println("$theater1 && $oper1 && $ausstellung1 && $lesung1 && $konzert1 && $performance1")
                 checkWhatTopicMatches()
             }
 
@@ -139,7 +132,7 @@ class Veranstaltungswahl : AppCompatActivity() {
 
     private fun giveThemaToFirebase() {
         if (DataStore.player1OR2) {
-            val thema1: MutableMap<String, Any> = hashMapOf(
+            DataStore.answer = hashMapOf(
                 "theater1" to "$theater1",
                 "oper1" to "$oper1",
                 "ausstellung1" to "$ausstellung1",
@@ -147,11 +140,11 @@ class Veranstaltungswahl : AppCompatActivity() {
                 "konzert1" to "$konzert1",
                 "performance1" to "$performance1",
             )
-            db.collection("Games").document(DataStore.gameID)
-                .update(thema1)
+
+            DataStore.updateAnswerInDB()
 
         } else {
-            val thema2: MutableMap<String, Any> = hashMapOf(
+            DataStore.answer = hashMapOf(
                 "theater2" to "$theater2",
                 "oper2" to "$oper2",
                 "ausstellung2" to "$ausstellung2",
@@ -159,8 +152,7 @@ class Veranstaltungswahl : AppCompatActivity() {
                 "konzert2" to "$konzert2",
                 "performance2" to "$performance2",
             )
-            db.collection("Games").document(DataStore.gameID)
-                .update(thema2)
+            DataStore.updateAnswerInDB()
         }
     }
 
@@ -240,52 +232,33 @@ class Veranstaltungswahl : AppCompatActivity() {
 
     private fun popoutWhenNoInputElseNewLayout() {
         if (DataStore.player1OR2) {
-            checkIfInput()
+            if (!ausstellung1 && !lesung1 && !konzert1 && !oper1 && !performance1 && !theater1) {
+                popout()
+            } else {
+                checkIfThemaMatch()
+            }
         } else {
-            checkIfInput2()
+            if (!ausstellung2 && !lesung2 && !konzert2 && !oper2 && !performance2 && !theater2) {
+                popout()
+            } else {
+                checkIfThemaMatch()
+            }
         }
     }
 
-    private fun checkIfInput() {
+    fun popout(){
 
-        if (!ausstellung1 && !lesung1 && !konzert1 && !oper1 && !performance1 && !theater1) {
-            val popoutNoTopic = layoutInflater.inflate(R.layout.popout_kein_thema_gewaehlt, null)
-            val popout = Dialog(this)
-            popout.setContentView(popoutNoTopic)
-            popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-            popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-            popout.show()
+        val popoutNoTopic = layoutInflater.inflate(R.layout.popout_kein_thema_gewaehlt, null)
+        val popout = Dialog(this)
+        popout.setContentView(popoutNoTopic)
+        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
+        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
+        popout.show()
 
-            val popoutButton = popoutNoTopic.findViewById<Button>(R.id.popoutButton)
-            popoutButton.setOnClickListener() {
-                popout.dismiss()
-            }
-
-        } else {
-            checkIfThemaMatch()
-            //ifNoMatchChooseRandom()
-        }
-    }
-
-    private fun checkIfInput2() {
-
-        if (!ausstellung2 && !lesung2 && !konzert2 && !oper2 && !performance2 && !theater2) {
-            val popoutNoTopic = layoutInflater.inflate(R.layout.popout_kein_thema_gewaehlt, null)
-            val popout = Dialog(this)
-            popout.setContentView(popoutNoTopic)
-            popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-            popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-            popout.show()
-
-            val popoutButton = popoutNoTopic.findViewById<Button>(R.id.popoutButton)
-            popoutButton.setOnClickListener() {
-                popout.dismiss()
-            }
-
-        } else {
-            checkIfThemaMatch()
+        val popoutButton = popoutNoTopic.findViewById<Button>(R.id.popoutButton)
+        popoutButton.setOnClickListener() {
+            popout.dismiss()
         }
     }
 }
