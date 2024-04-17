@@ -62,14 +62,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VeranstaltungswahlOffline2"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".Spielbrett"
             android:exported="true">
             <intent-filter>
@@ -110,14 +102,6 @@
         </activity>
         <activity
             android:name=".BewertungOffline"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".BewertungOffline2"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
