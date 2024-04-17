@@ -109,7 +109,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BewertungOffline1"
+            android:name=".BewertungOffline"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
