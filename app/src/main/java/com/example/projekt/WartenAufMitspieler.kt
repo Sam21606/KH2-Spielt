@@ -38,7 +38,6 @@ class WartenAufMitspieler : AppCompatActivity() {
         if (DataStore.topic == "Theater" || DataStore.topic == "Oper" || DataStore.topic == "Lesung" || DataStore.topic == "Performance" || DataStore.topic == "Ausstellung" || DataStore.topic == "Konzert") {
             val intent = Intent(this, ThemaErgebnis::class.java)
             startActivity(intent)
-        } else {
         }
     }
 
