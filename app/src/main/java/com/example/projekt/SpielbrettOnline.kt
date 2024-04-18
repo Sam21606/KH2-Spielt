@@ -273,8 +273,4 @@ class SpielbrettOnline : AppCompatActivity(){
 
 
     //BEWERTUNG
-
-    private fun changePlayerText() {
-        TODO("Not yet implemented")
-    }
 }
