@@ -13,10 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
 
-    lateinit var ratingBewertung: RatingBar
-    lateinit var buttonWeiterBewertung: Button
+    private lateinit var ratingBewertung: RatingBar
+    private lateinit var buttonWeiterBewertung: Button
     private lateinit var playerToRateText: TextView
-    var playerToRate = 0
+    private var playerToRate = 0
+    var rating1 = 0
+    var rating2 = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +32,7 @@ class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
         ratingBewertung = findViewById(R.id.ratingBewertung)
         buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
         playerToRateText = findViewById(R.id.playerToRate)
-        playerToRateText.text = "Bewerte nun ${DataStore.playerName1}"
+        playerToRateText.text = getString(R.string.bewerte_nun , DataStore.playerName1)
         buttonWeiterBewertung.setOnClickListener {
             bewertungAusleser()
         }
@@ -43,15 +45,15 @@ class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
 
     private fun bewertungAusleser() {
         if (playerToRate == 0){
-            DataStore.rating1 = ratingBewertung.rating.toInt()
+            rating1 = ratingBewertung.rating.toInt()
             playerToRate = 1
-            playerToRateText.text = "Bewerte nun ${DataStore.playerName2}"
+            playerToRateText.text = getString(R.string.bewerte_nun2 , DataStore.playerName2)
         }else if (playerToRate == 1){
-            DataStore.rating2 = ratingBewertung.rating.toInt()
+            rating2 = ratingBewertung.rating.toInt()
         }
-        if (DataStore.rating1 == 0) {
+        if (rating1 == 0) {
             popout()
-        } else if (DataStore.rating2 == 0) {
+        } else if (rating2 == 0) {
             popout()
         }else {
                 startIntent()

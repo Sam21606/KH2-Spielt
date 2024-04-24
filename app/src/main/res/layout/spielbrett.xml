@@ -101,7 +101,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="player 1"
         app:layout_constraintBottom_toTopOf="@+id/imagePlayer1"
         app:layout_constraintEnd_toEndOf="@+id/imagePlayer1"
         app:layout_constraintStart_toStartOf="@+id/imagePlayer1" />
@@ -111,7 +110,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="player 2"
         app:layout_constraintBottom_toTopOf="@+id/imagePlayer2"
         app:layout_constraintEnd_toEndOf="@+id/imagePlayer2"
         app:layout_constraintStart_toStartOf="@+id/imagePlayer2" />
@@ -121,7 +119,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Punkte 2"
         app:layout_constraintEnd_toEndOf="@+id/textViewPunkte1"
         app:layout_constraintStart_toStartOf="@+id/textViewPunkte1"
         app:layout_constraintTop_toBottomOf="@+id/textViewPunkte1" />
@@ -131,7 +128,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Punkte 1"
         app:layout_constraintEnd_toEndOf="@+id/infoButton"
         app:layout_constraintStart_toStartOf="@+id/infoButton"
         app:layout_constraintTop_toBottomOf="@+id/textViewInfo" />
@@ -141,7 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Weiter"
+        android:text="@string/continue_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

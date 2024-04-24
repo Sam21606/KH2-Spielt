@@ -222,8 +222,13 @@ class Veranstaltungswahl : AppCompatActivity() {
     }
 
     private fun selectQuestions() {
+        var questioNumbers = 1
         // Logik um Fragen nach Thema auszuwählen
-        DataStore.questionsPicked = mutableListOf("test", 2)
+        for (i in 0 until  DataStore.questionCount){
+            DataStore.questionsPicked.add(questioNumbers)
+            questioNumbers += 1
+        }
+        DataStore.questionsPicked.random()
     }
 
     fun checkboxCheck() {

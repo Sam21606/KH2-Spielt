@@ -69,14 +69,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ZweiteEtappeOnline"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".Chat"
             android:exported="true">
             <intent-filter>
@@ -93,23 +85,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BewertungOnline"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".BewertungOffline"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".QuizOnline"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -125,7 +101,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SpielbrettOnline"
+            android:name=".Board"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -142,14 +118,6 @@
         </activity>
         <activity
             android:name=".Stufe4Offline"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Stufe4Online"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

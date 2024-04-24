@@ -9,7 +9,7 @@ class EreignisskarteOffline : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ereignisskarte_offline)
+        setContentView(R.layout.ereignisskarte)
 
         init()
     }

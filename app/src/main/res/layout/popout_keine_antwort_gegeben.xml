@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/no_rating"
+                android:text="@string/no_answer"
                 android:textSize="28sp" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/no_rating_explained"
+                android:text="@string/no_answer_explained"
                 android:textSize="24sp" />
 
             <Button

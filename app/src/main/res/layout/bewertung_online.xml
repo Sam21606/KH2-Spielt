@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:gravity="center"
-        android:text="@string/no_answer"
+        android:text="@string/no_answer_from_player"
         app:layout_constraintEnd_toEndOf="@+id/textViewBewertungErklärung"
         app:layout_constraintStart_toStartOf="@+id/textViewBewertungErklärung"
         app:layout_constraintTop_toBottomOf="@+id/textViewBewertungErklärung" />

@@ -29,8 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Keine Name eingegeben"
-                android:textSize="28dp" />
+                android:text="@string/no_name"
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/popoutText"
@@ -38,15 +38,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Du musst einen Namen eingeben um spielen zu können"
-                android:textSize="24dp" />
+                android:text="@string/no_name_explained"
+                android:textSize="24sp" />
 
             <Button
                 android:id="@+id/popoutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Ok" />
+                android:text="@string/ok" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

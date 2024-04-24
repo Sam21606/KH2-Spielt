@@ -3,17 +3,16 @@ package com.example.projekt
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
+    var questionCount = 3
     lateinit var answer: MutableMap<String, Any>
     var gameMode: Boolean = true
     var playerName1: String = ""
     var playerName2: String = ""
     var topic: String = ""
     var stage = 1
-    var rating1 = 0
-    var rating2 = 0
     var currentPoints1 = 0
     var currentPoints2 = 0
-    var questionsPicked = mutableListOf<Any>("2","123")
+    var questionsPicked = mutableListOf<Int>()
     val questions = mutableListOf<Question>()
     val answers = mutableListOf<Answer>()
 
@@ -24,14 +23,6 @@ object DataStore {
 
 
     var db = FirebaseFirestore.getInstance()
-
-    fun getDatastoreData(){
-        val docRef = db.collection("Games").document(gameID)
-        docRef.addSnapshotListener{ snapshot, _ ->
-            gameID = snapshot?.get("gameID") as? String ?: ""
-
-        }
-    }
 
     fun logQuestionAnswers() {
         println("DB Funktion logQuestionAnswers angefangen")

@@ -67,43 +67,30 @@ class Spielbrett : AppCompatActivity() {
 
     private fun setNewActivity() {
 
-        if (DataStore.gameMode) {
-            when (DataStore.stage) {
-                1 -> {
-                    val intent = Intent(this, ZweiteEtappeOnline::class.java)
-                    startActivity(intent)
-                }
-
-                else -> Unit
+        when (DataStore.stage) {
+            1 -> {
+                val intent = Intent(this, EreignisskarteOffline::class.java)
+                startActivity(intent)
             }
-        }
-
-        if (DataStore.stage == 1 && DataStore.gameMode) {
-            val intent = Intent(this, ZweiteEtappeOnline::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 1 && !DataStore.gameMode) {
-            val intent = Intent(this, EreignisskarteOffline::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 2 && DataStore.gameMode) {
-            val intent = Intent(this, QuizOnline::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 2 && !DataStore.gameMode) {
-            val intent = Intent(this, QuizOffline::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 3 && DataStore.gameMode) {
-            val intent = Intent(this, Stufe4Online::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 3 && !DataStore.gameMode) {
-            val intent = Intent(this, Stufe4Offline::class.java)
-            startActivity(intent)
-        } else if (DataStore.stage == 4) {
-            println("${DataStore.stage}")
+            2 -> {
+                val intent = Intent(this, QuizOffline::class.java)
+                startActivity(intent)
+            }
+            3 -> {
+                val intent = Intent(this, Stufe4Offline::class.java)
+                startActivity(intent)
+            }
+            4 -> {
+                println("${DataStore.stage}")
+            }
         }
     }
 
     fun setPunkteanzeigen() {
-        punkteanzeige1 = DataStore.rating1
-        punkteanzeige2 = DataStore.rating2
+        val bewertungOffline = BewertungOffline()
+
+        punkteanzeige1 = bewertungOffline.rating1
+        punkteanzeige2 = bewertungOffline.rating2
         textViewPunkte1.text = punkteanzeige1.toString()
         textViewPunkte2.text = punkteanzeige2.toString()
     }

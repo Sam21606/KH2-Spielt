@@ -26,7 +26,7 @@ class ThemaErgebnis : AppCompatActivity() {
         textThemaErgebnis.text = getString(R.string.topic_text, DataStore.topic)
         buttonThema.setOnClickListener {
         if (DataStore.gameMode) {
-            val intent = Intent(this, SpielbrettOnline::class.java)
+            val intent = Intent(this, Board::class.java)
             startActivity(intent)
         }else{
             val intent = Intent(this, Spielbrett::class.java)
