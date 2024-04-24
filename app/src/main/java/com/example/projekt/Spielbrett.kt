@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
 
 class Spielbrett : AppCompatActivity() {
 
@@ -19,7 +18,6 @@ class Spielbrett : AppCompatActivity() {
     lateinit var homeButton: ImageButton
     lateinit var textViewPunkte1: TextView
     lateinit var textViewPunkte2: TextView
-    var db = FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,6 @@ class Spielbrett : AppCompatActivity() {
     }
 
     private fun init() {
-        DataStore.logQuestionAnswers()
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
         infoButton = findViewById(R.id.infoButton)
         chatButton = findViewById(R.id.chatButton)
@@ -69,7 +66,6 @@ class Spielbrett : AppCompatActivity() {
     }
 
     private fun setNewActivity() {
-        DataStore.addGameDataToFirestore()
 
         if (DataStore.gameMode) {
             when (DataStore.stage) {

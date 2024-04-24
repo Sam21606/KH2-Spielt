@@ -50,6 +50,7 @@ class PlayerConfig : AppCompatActivity() {
         DataStore.playerName2 = textName2.text.toString()
         onlineOfflinechanger()
         if (DataStore.gameMode && DataStore.playerName1 != "") {
+            DataStore.logQuestionAnswers()
             val intent = Intent(this, OnlineConnection::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {

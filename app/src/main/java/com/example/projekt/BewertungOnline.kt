@@ -24,7 +24,7 @@ class BewertungOnline : AppCompatActivity() {
 
     private fun init() {
         ratingBewertung = findViewById(R.id.ratingBewertung)
-        buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung1)
+        buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
         textViewInputVonMitspieler = findViewById(R.id.textViewInputVonMitspieler)
         buttonWeiterBewertung.setOnClickListener {
             checkBewertung()

@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, PlayerConfig::class.java)
             startActivity(intent)
         }
-        //DataStore.logQuestionAnswers()
         //test()
 
     }

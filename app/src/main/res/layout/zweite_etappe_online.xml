@@ -21,7 +21,7 @@
             android:id="@+id/ediTextStoryInput"
             android:layout_width="355dp"
             android:layout_height="wrap_content"
-            android:hint="Tippe hier deine Antwwort ein" />
+            android:hint="@string/answer_tip" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Weiter"
+        android:text="@string/continue_text"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2" />

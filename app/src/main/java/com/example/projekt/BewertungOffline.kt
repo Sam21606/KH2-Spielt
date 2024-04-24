@@ -28,7 +28,7 @@ class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
 
     private fun init() {
         ratingBewertung = findViewById(R.id.ratingBewertung)
-        buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung1)
+        buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
         playerToRateText = findViewById(R.id.playerToRate)
         playerToRateText.text = "Bewerte nun ${DataStore.playerName1}"
         buttonWeiterBewertung.setOnClickListener {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
@@ -18,8 +19,8 @@ class SpielbrettOnline : AppCompatActivity(){
     private lateinit var textViewStufe: TextView
     private var pointsShown1 = 0
     private var pointsShown2 = 0
-    private var storyText1 = ""
-    private var storyText2 = ""
+    private var storyText1 = "Warte auf Eingabe"
+    private var storyText2 = "Warte auf Eingabe"
     private var playerCanContinue = false
     private var player1IsReady = false
     private var player2IsReady = false
@@ -28,6 +29,7 @@ class SpielbrettOnline : AppCompatActivity(){
     private var currentPoints2Before = 0
 
     private var thereIsTheStoryInput = false
+    private var ratingIsInitalised = false
 
     private lateinit var buttonSpielbrett: Button
     private lateinit var infoButton: ImageButton
@@ -40,6 +42,11 @@ class SpielbrettOnline : AppCompatActivity(){
     lateinit var buttonWeiterBewertung: Button
     lateinit var textViewInputVonMitspieler: TextView
 
+    lateinit var buttonWeiterEreigniskarte : Button
+
+    lateinit var weiterButton : Button
+    lateinit var ediTextStoryInput : TextInputEditText
+
 
     var ediTextInput = ""
     var db = FirebaseFirestore.getInstance()
@@ -47,20 +54,11 @@ class SpielbrettOnline : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        init()
-    }
-
-    private fun init(){
-        DataStore.logQuestionAnswers() // MUSS GEÄNDERT WERDEN
-        setSnapshotListener()
-
         initSpielbrett()
     }
 
     private fun initSpielbrett() {
         setContentView(R.layout.spielbrett)
-        updatePlayerStatusInDB()
         playerCanContinue = false // muss warten bis anderer Spieler bereit ist
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
         infoButton = findViewById(R.id.infoButton)
@@ -82,8 +80,8 @@ class SpielbrettOnline : AppCompatActivity(){
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
         }
-        DataStore.currentPoints1 = pointsShown1
-        DataStore.currentPoints2 = pointsShown2
+        updatePlayerStatusInDB()
+        setSnapshotListener()
     }
 
     private fun updatePlayerStatusInDB() {
@@ -91,17 +89,22 @@ class SpielbrettOnline : AppCompatActivity(){
             DataStore.answer = hashMapOf(
                 "player1IsReady" to true,
             )
+            DataStore.updateAnswerInDB()
         }else{
             DataStore.answer = hashMapOf(
                 "player2IsReady" to true,
             )
+            DataStore.updateAnswerInDB()
         }
-        DataStore.updateAnswerInDB()
     }
 
     private fun setSnapshotListener() {
+        println("DB Funktion SnapshotListener angefangen")
         db.collection("Games").document(DataStore.gameID)
-            .addSnapshotListener{snapshot, _->
+            .addSnapshotListener{snapshot, exception->
+                if (exception != null){
+                    println("DB Funktion SnapshotListener FAIL")
+                }
                 setVarToCompare()
 
                 DataStore.currentPoints1 = snapshot?.getLong("currentPoints1")!!.toInt()
@@ -111,7 +114,10 @@ class SpielbrettOnline : AppCompatActivity(){
                 player1IsReady = snapshot.getBoolean("player1IsReady")!!
                 player2IsReady = snapshot.getBoolean("player2IsReady")!!
 
+
+
                 checkWhatNewInput()
+                println("DB Funktion SnapshotListener beendet")
             }
     }
 
@@ -124,10 +130,17 @@ class SpielbrettOnline : AppCompatActivity(){
         if (currentPoints2Before != DataStore.currentPoints2 || currentPoints1Before != DataStore.currentPoints1){
             pointsShown1 = DataStore.currentPoints1
             pointsShown2 = DataStore.currentPoints2
-        }else if (storyText2 != "" || DataStore.player1OR2){
-                thereIsTheStoryInput = true
-
-        }else if (!DataStore.player1OR2 && storyText1 != ""){
+        }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised ){
+            thereIsTheStoryInput = true
+            setDisplayedText()
+            println("ich wurde ausgeführt2 storyText2 $storyText2  storyText1 $storyText1 ${DataStore.player1OR2} $ratingIsInitalised")
+        }else if (!DataStore.player1OR2 && storyText1 != "Warte auf Eingabe" && ratingIsInitalised){
+            thereIsTheStoryInput = true
+            setDisplayedText()
+            println("ich wurde ausgeführt2 storyText2 $storyText2  storyText1 $storyText1 ${DataStore.player1OR2} $ratingIsInitalised")
+        }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2){
+            thereIsTheStoryInput = true
+        }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2){
             thereIsTheStoryInput = true
         }
         if (player1IsReady || player2IsReady){
@@ -142,14 +155,11 @@ class SpielbrettOnline : AppCompatActivity(){
         startActivity(intent)
     }
     fun setPunkteanzeigen() {
-        pointsShown1 = DataStore.rating1
-        pointsShown2 = DataStore.rating2
-        textViewPunkte1.text = pointsShown1.toString()
-        textViewPunkte2.text = pointsShown2.toString()
+        textViewPunkte1.text = DataStore.currentPoints1.toString()
+        textViewPunkte2.text = DataStore.currentPoints2.toString()
     }
 
     private fun setNewActivity() {
-        DataStore.addGameDataToFirestore()
 
         if (DataStore.gameMode) {
             when (DataStore.stage) {
@@ -174,9 +184,8 @@ class SpielbrettOnline : AppCompatActivity(){
 
     // ErignisKarte
     private fun initEreignisKarte() {
-        val buttonWeiterEreigniskarte = findViewById<Button>(R.id.buttonWeiterEreigniskarte)
+        buttonWeiterEreigniskarte = findViewById<Button>(R.id.buttonWeiterEreigniskarte)
         buttonWeiterEreigniskarte.setOnClickListener {
-            setContentView(R.layout.zweite_etappe_online)
             initZweiteEtappe()
         }
     }
@@ -184,8 +193,9 @@ class SpielbrettOnline : AppCompatActivity(){
 
     // ZweiteEtappe
     private fun initZweiteEtappe() {
-        val weiterButton : Button = findViewById(R.id.Weiter)
-        val ediTextStoryInput : TextInputEditText = findViewById(R.id.ediTextStoryInput)
+        setContentView(R.layout.zweite_etappe_online)
+        weiterButton = findViewById(R.id.Weiter)
+        ediTextStoryInput = findViewById(R.id.ediTextStoryInput)
 
         weiterButton.setOnClickListener {
             ediTextInput = ediTextStoryInput.text.toString()
@@ -211,19 +221,19 @@ class SpielbrettOnline : AppCompatActivity(){
     }
 
 
+
+
     // BewertungOnline
 
     private fun initBewertungOnline() {
-         ratingBewertung = findViewById(R.id.ratingBewertung)
-         buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung1)
-         textViewInputVonMitspieler = findViewById(R.id.textViewInputVonMitspieler)
+        ratingBewertung = findViewById(R.id.ratingBewertung)
+        buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
+        textViewInputVonMitspieler = findViewById(R.id.textViewInputVonMitspieler)
+        ratingIsInitalised = true
         if (thereIsTheStoryInput){
-            if (DataStore.player1OR2){
-                textViewInputVonMitspieler.text = storyText2
-            } else{
-                textViewInputVonMitspieler.text = storyText1
-            }
-            buttonWeiterBewertung.text!= "Bewertung abgeben"
+            setDisplayedText()
+        }else{
+            buttonWeiterBewertung.visibility = View.INVISIBLE
         }
         buttonWeiterBewertung.setOnClickListener {
             checkBewertung()
@@ -231,29 +241,36 @@ class SpielbrettOnline : AppCompatActivity(){
     }
 
     private fun checkBewertung() {
-        if (thereIsTheStoryInput) {
-            DataStore.rating1 = ratingBewertung.rating.toInt()
-            if (DataStore.rating1 == 0) {
-                popout()
+        val pointsFromRating = ratingBewertung.rating.toInt()
+        if (DataStore.rating1 == 0) {
+            popout()
+        } else {
+            DataStore.stage = 2
+            if (DataStore.player1OR2) {
+                DataStore.answer = hashMapOf(
+                    "currentPoints1" to DataStore.currentPoints2 + pointsFromRating ,
+                )
+                DataStore.updateAnswerInDB()
             } else {
-                DataStore.stage = 2
-                if (DataStore.player1OR2) {
-                    DataStore.answer = hashMapOf(
-                        "currentPoints1" to DataStore.currentPoints2,
-                    )
-                    DataStore.updateAnswerInDB()
-                } else {
-                    DataStore.answer= hashMapOf(
-                        "currentPoints2" to DataStore.currentPoints2,
-                    )
-                    DataStore.updateAnswerInDB()
-                }
-
-                initSpielbrett()
+                DataStore.answer = hashMapOf(
+                    "currentPoints2" to DataStore.currentPoints2 + pointsFromRating,
+                )
+                DataStore.updateAnswerInDB()
             }
+            initSpielbrett()
         }
     }
 
+    private fun setDisplayedText(){
+        if (DataStore.player1OR2){
+            textViewInputVonMitspieler.text = storyText2
+        }else{
+            textViewInputVonMitspieler.text = storyText1
+        }
+        buttonWeiterBewertung.visibility = View.VISIBLE
+        buttonWeiterBewertung.text = "Bewertung abgeben"
+        println("Ich wurde ausgeführt")
+    }
 
     private fun popout(){
         val popoutNoName =
@@ -270,7 +287,4 @@ class SpielbrettOnline : AppCompatActivity(){
         }
     }
 
-
-
-    //BEWERTUNG
 }

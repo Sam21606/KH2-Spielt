@@ -42,6 +42,7 @@ class OnlineConnection : AppCompatActivity() {
                 val intent = Intent(this, Veranstaltungswahl::class.java)
                 startActivity(intent)
             }else if (buttonConnectGameClicked == 0){
+                DataStore.playerName2 = DataStore.playerName1
                 buttonConnectGame.text = "ID Prüfen"
                 buttonCreateGame.visibility = View.INVISIBLE
                 editTextIDInput.visibility = View.VISIBLE
@@ -57,7 +58,7 @@ class OnlineConnection : AppCompatActivity() {
         if (buttonCreateGameClicked == 0) {
             DataStore.answer = hashMapOf(
                 "playerName1" to DataStore.playerName1,
-                "satge" to DataStore.stage
+                "stage" to DataStore.stage
             )
             DataStore.createGame()
             buttonCreateGame.text = "Kopiere ID"
@@ -68,7 +69,6 @@ class OnlineConnection : AppCompatActivity() {
             clipboardManager.setPrimaryClip(clipData)
             buttonConnectGame.visibility = View.VISIBLE
             buttonConnectGame.text= "Game Starten"
-            println("Was ist mit der Id ${DataStore.gameID}")
         }
     }
 
@@ -84,7 +84,9 @@ class OnlineConnection : AppCompatActivity() {
                         "player1IsReady" to false,
                         "player2IsReady" to false,
                         "currentPoints1" to 0,
-                        "currentPoints2" to 0
+                        "currentPoints2" to 0,
+                        "storyText1" to "Warte auf Eingabe",
+                        "storyText2" to "Warte auf Eingabe"
                     )
                     DataStore.updateAnswerInDB()
 

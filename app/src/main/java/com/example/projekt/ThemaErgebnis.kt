@@ -19,6 +19,8 @@ class ThemaErgebnis : AppCompatActivity() {
     }
 
     private fun init() {
+        DataStore.logQuestionAnswers()
+        println("Ich wurde ausgeführt crash?")
         buttonThema = findViewById(R.id.buttonThema)
         textThemaErgebnis = findViewById(R.id.TextThemaErgebnis)
         textThemaErgebnis.text = getString(R.string.topic_text, DataStore.topic)
@@ -31,6 +33,5 @@ class ThemaErgebnis : AppCompatActivity() {
             startActivity(intent)
         }
         }
-        DataStore.addGameDataToFirestore()
     }
 }

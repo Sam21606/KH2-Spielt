@@ -24,25 +24,6 @@ object DataStore {
 
 
     var db = FirebaseFirestore.getInstance()
-    fun addGameDataToFirestore() {
-        if (player1OR2) {
-            answer = hashMapOf(
-                "playerName1" to playerName1,
-                "topic" to topic,
-                "currentPoints1" to currentPoints1,
-                "questionsPicked" to questionsPicked,
-            )
-        } else {
-
-            answer = hashMapOf(
-                "playerName2" to playerName2,
-                "topic" to topic,
-                "currentPoints2" to currentPoints2,
-                "questionsPicked" to questionsPicked,
-            )
-        }
-        updateAnswerInDB()
-    }
 
     fun getDatastoreData(){
         val docRef = db.collection("Games").document(gameID)
@@ -53,6 +34,7 @@ object DataStore {
     }
 
     fun logQuestionAnswers() {
+        println("DB Funktion logQuestionAnswers angefangen")
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
         docRef.get() // lädt diese collection herunter
             .addOnFailureListener {
@@ -84,6 +66,7 @@ object DataStore {
                     )
                 }
                 answersInApp += 1
+                println("DB Funktion logQuestionAnswers beendet")
             }
 
     }
@@ -98,8 +81,13 @@ object DataStore {
     }
 
     fun updateAnswerInDB(){
+        println("DB Funktion updateAnswer started")
         db.collection("Games").document(gameID)
             .update(answer)
+            .addOnFailureListener {
+                println("DB Funktion updateAnswer FAILLL")
+            }
+        println("DB Funktion updateAnswer ended")
     }
 }
 

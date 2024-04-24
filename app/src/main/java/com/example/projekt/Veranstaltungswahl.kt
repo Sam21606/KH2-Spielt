@@ -29,14 +29,14 @@ class Veranstaltungswahl : AppCompatActivity() {
     private var performance2 = false
     private var konzert2 = false
     private val themaSet: MutableList<String> = mutableListOf()
-    lateinit var continueVeranstaltung: Button
-    lateinit var checkTheater: CheckBox
-    lateinit var checkLesung: CheckBox
-    lateinit var checkKonzert: CheckBox
-    lateinit var checkPerformance: CheckBox
-    lateinit var checkOper: CheckBox
-    lateinit var checkAusstellung: CheckBox
-    lateinit var textViewSpieler1online: TextView
+    private lateinit var continueVeranstaltung: Button
+    private lateinit var checkTheater: CheckBox
+    private lateinit var checkLesung: CheckBox
+    private lateinit var checkKonzert: CheckBox
+    private lateinit var checkPerformance: CheckBox
+    private lateinit var checkOper: CheckBox
+    private lateinit var checkAusstellung: CheckBox
+    private lateinit var textViewSpieler1online: TextView
     var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,15 +70,15 @@ class Veranstaltungswahl : AppCompatActivity() {
         )
 
         continueVeranstaltung.setOnClickListener {
-            getThemaFromFirebase()
+            getTopicFromFirebase()
         }
         textViewSpieler1online.text = DataStore.playerName1
     }
 
     fun checkIfThemaMatch() {
         checkboxCheck()
-        giveThemaToFirebase()
-        checkIfThereIsThemaFromFirebase()
+        giveTopicToFirebase()
+        checkIfThereIsTopicFromFirebase()
 
     }
 
@@ -104,14 +104,11 @@ class Veranstaltungswahl : AppCompatActivity() {
         if (themaSet.isEmpty()) {
             ifNoMatchChooseRandom()
         } else {
-            random = (0 until (themaSet.size)).random()
-            DataStore.topic = themaSet[random]
-            val intent = Intent(this, ThemaErgebnis::class.java)
-            startActivity(intent)
+            updateTopicInDS()
         }
     }
 
-    private fun checkIfThereIsThemaFromFirebase() {
+    private fun checkIfThereIsTopicFromFirebase() {
         if (DataStore.player1OR2) {
             if (!theater2 && !oper2 && !ausstellung2 && !lesung2 && !konzert2 && !performance2) {
                 val intent = Intent(this, WartenAufMitspieler::class.java)
@@ -130,7 +127,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         }
     }
 
-    private fun giveThemaToFirebase() {
+    private fun giveTopicToFirebase() {
         if (DataStore.player1OR2) {
             DataStore.answer = hashMapOf(
                 "theater1" to "$theater1",
@@ -156,7 +153,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         }
     }
 
-    private fun getThemaFromFirebase() {
+    private fun getTopicFromFirebase() {
         if (DataStore.player1OR2) {
             val docRef = db.collection("Games").document(DataStore.gameID)
             docRef.get()
@@ -180,7 +177,6 @@ class Veranstaltungswahl : AppCompatActivity() {
                     lesung1 = document.getString("lesung1").toBoolean()
                     konzert1 = document.getString("konzert1").toBoolean()
                     performance1 = document.getString("performance1").toBoolean()
-                    println("succcssca+isbfa0eiÜP^DOSGVÜ89IOD#BGFVÄOIADGVLwgiu&&")
                     popoutWhenNoInputElseNewLayout()
                 }
         }
@@ -206,9 +202,28 @@ class Veranstaltungswahl : AppCompatActivity() {
             if (performance1 || performance2) {
                 themaSet.add("Performance")
             }
+            updateTopicInDS()
         }
+
+
+    }
+
+    private fun updateTopicInDS(){
         random = (0 until (themaSet.size)).random()
         DataStore.topic = themaSet[random]
+        selectQuestions()
+        DataStore.answer = hashMapOf(
+            "topic" to DataStore.topic,
+            "questionsPicked" to DataStore.questionsPicked
+        )
+        DataStore.updateAnswerInDB()
+        val intent = Intent(this, ThemaErgebnis::class.java)
+        startActivity(intent)
+    }
+
+    private fun selectQuestions() {
+        // Logik um Fragen nach Thema auszuwählen
+        DataStore.questionsPicked = mutableListOf("test", 2)
     }
 
     fun checkboxCheck() {
