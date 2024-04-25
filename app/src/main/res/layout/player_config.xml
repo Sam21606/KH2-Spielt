@@ -5,7 +5,7 @@
     android:id="@+id/second_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3C5068"
+    android:background="@color/backgroundGray"
     android:visibility="visible">
 
     <ImageButton
@@ -32,6 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:backgroundTint="@color/grey"
         android:id="@+id/gameStartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

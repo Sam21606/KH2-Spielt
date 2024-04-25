@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundGray"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -42,6 +43,7 @@
                 android:textSize="24sp" />
 
             <Button
+                android:backgroundTint="@color/grey"
                 android:id="@+id/popoutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
