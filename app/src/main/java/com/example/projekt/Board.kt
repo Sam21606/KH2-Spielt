@@ -1,6 +1,7 @@
 package com.example.projekt
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -79,13 +81,14 @@ class Board : AppCompatActivity(){
     }
 
     private fun initBoard() {
-        setContentView(R.layout.spielbrett)
+        setContentView(R.layout.board)
         playerCanContinue = false // muss warten bis anderer Spieler bereit ist
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
-        textViewStufe = findViewById(R.id.textViewStufe)
-
+        textViewStufe = findViewById(R.id.textViewBoard)
+        textViewPlayer1 = findViewById(R.id.textViewPlayer1)
+        textViewPlayer2 = findViewById(R.id.textViewPlayer2)
         textViewStufe.text = getString(R.string.Stage_text , DataStore.stage.toString())
-        setPunkteanzeigen()
+            setPunkteanzeigen()
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
         }
@@ -97,18 +100,19 @@ class Board : AppCompatActivity(){
         if (DataStore.player1OR2){
             DataStore.answer = hashMapOf(
                 "player1IsReady" to true,
+                "stage" to DataStore.stage
             )
             DataStore.updateAnswerInDB()
         }else{
             DataStore.answer = hashMapOf(
                 "player2IsReady" to true,
+                "stage" to DataStore.stage
             )
             DataStore.updateAnswerInDB()
         }
     }
 
     private fun setSnapshotListener() {
-        println("DB Funktion SnapshotListener angefangen")
         db.collection("Games").document(DataStore.gameID)
             .addSnapshotListener{snapshot, exception->
                 if (exception != null){
@@ -127,7 +131,6 @@ class Board : AppCompatActivity(){
 
 
                 checkWhatNewInput()
-                println("DB Funktion SnapshotListener beendet")
             }
     }
 
@@ -142,11 +145,9 @@ class Board : AppCompatActivity(){
         }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised ){
             thereIsTheStoryInput = true
             setDisplayedText()
-            println("ich wurde ausgeführt2 storyText2 $storyText2  storyText1 $storyText1 ${DataStore.player1OR2} $ratingIsInitalised")
         }else if (!DataStore.player1OR2 && storyText1 != "Warte auf Eingabe" && ratingIsInitalised){
             thereIsTheStoryInput = true
             setDisplayedText()
-            println("ich wurde ausgeführt2 storyText2 $storyText2  storyText1 $storyText1 ${DataStore.player1OR2} $ratingIsInitalised")
         }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2){
             thereIsTheStoryInput = true
         }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2){
@@ -287,14 +288,13 @@ class Board : AppCompatActivity(){
     }
 
     private fun popout(){
-        val popoutNoInput =
-            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
+        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[1]
         popoutTitle.text = chosenPopout[0]
-        popout.setContentView(R.layout.popout_template)
+        popout.setContentView(popoutNoInput)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
@@ -341,6 +341,8 @@ class Board : AppCompatActivity(){
 
     }
     private fun nextQuestion() {
+        toggleButtonClicked = 0
+        changeToggleButtonStyle()
         //Prüft ob noch eine neue Frage angezeigt werden muss
         if (questionNumber == choosedQuestion) {
             //Aktualisiere Punkte in der DB
@@ -387,7 +389,6 @@ class Board : AppCompatActivity(){
 
     fun setNewRandomQuestion() {
         // Wählt über eine Zuffalszahl eine Frage aus
-        println("HAAAAAAAAALLLLLO ${DataStore.questionsPicked}")
         questionID = DataStore.questions[DataStore.questionsPicked[questionNumber]].ID
         questionText = DataStore.questions[DataStore.questionsPicked[questionNumber]].text
         textViewFrageQuiz.text = questionText
@@ -425,22 +426,19 @@ class Board : AppCompatActivity(){
         buttonAnswer4Online.text = answer4Text
         buttonAnswer4Online.textOn = answer4Text
     }
+
     private fun button1Clicked() {
         toggleButtonClicked = 1
         changeToggleButtonStyle()
         clickedAnswerID = matchAnswersId[0]
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer")
     }
-
-
 
     private fun button2Clicked() {
         toggleButtonClicked = 2
         changeToggleButtonStyle()
         clickedAnswerID = matchAnswersId[1]
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID  }
-        println ("teeeeeeeeest $choosenanswer")
     }
 
     private fun button3Clicked() {
@@ -448,7 +446,6 @@ class Board : AppCompatActivity(){
         changeToggleButtonStyle()
         clickedAnswerID = matchAnswersId[2]
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer $clickedAnswerID $matchedAnswers")
     }
 
     private fun button4Clicked() {
@@ -456,36 +453,41 @@ class Board : AppCompatActivity(){
         changeToggleButtonStyle()
         clickedAnswerID = matchAnswersId[3]
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer")
     }
 
     private fun changeToggleButtonStyle() {
         when (toggleButtonClicked){
+            0->{
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+            }
             1 -> {
-                buttonAnswer1Online.text = "ausgewählt"
-                buttonAnswer2Online.text
-                buttonAnswer3Online.text
-                buttonAnswer4Online.text
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
             }
             2 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online.text = "ausgewählt"
-                buttonAnswer3Online
-                buttonAnswer4Online
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
 
             }
             3 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online
-                buttonAnswer3Online.text = "ausgewählt"
-                buttonAnswer4Online
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
 
             }
             4 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online
-                buttonAnswer3Online
-                buttonAnswer4Online.text = "ausgewählt"
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
 
             }
 

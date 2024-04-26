@@ -2,6 +2,7 @@ package com.example.projekt
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class QuizOffline : AppCompatActivity() {
     private lateinit var quizWeiterOnline: Button
@@ -79,6 +81,8 @@ class QuizOffline : AppCompatActivity() {
 
     }
     private fun nextQuestion() {
+        toggleButtonClicked = 0
+        changeToggleButtonStyle()
         //Prüft ob noch eine neue Frage angezeigt werden muss
         if (questionNumber == DataStore.questionCount * 2) {//questionCount = Anzahl an Fragen pro Spieler
             addPoints()
@@ -102,17 +106,14 @@ class QuizOffline : AppCompatActivity() {
         if (choosenanswer == correctAnswer) {
             if (questionNumber == DataStore.questionCount + 1){
                 DataStore.player1OR2 = false
+            }else if (questionNumber == DataStore.questionCount){
                 playerName.text = DataStore.playerName2
             }
             if (DataStore.player1OR2) {
                 DataStore.currentPoints1 += 1
-                println("Punkte")
             } else {
                 DataStore.currentPoints2 += 1
-                println("Punkte2")
             }
-        }else{
-            println("Du bist dumm ${DataStore.player1OR2}")
         }
     }
 
@@ -198,31 +199,37 @@ class QuizOffline : AppCompatActivity() {
 
     private fun changeToggleButtonStyle() {
         when (toggleButtonClicked){
+            0->{
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+            }
             1 -> {
-                buttonAnswer1Online.text = "ausgewählt"
-                buttonAnswer2Online.text
-                buttonAnswer3Online.text
-                buttonAnswer4Online.text
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
             }
             2 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online.text = "ausgewählt"
-                buttonAnswer3Online
-                buttonAnswer4Online
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
 
             }
             3 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online
-                buttonAnswer3Online.text = "ausgewählt"
-                buttonAnswer4Online
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
 
             }
             4 -> {
-                buttonAnswer1Online
-                buttonAnswer2Online
-                buttonAnswer3Online
-                buttonAnswer4Online.text = "ausgewählt"
+                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
 
             }
 
@@ -230,14 +237,13 @@ class QuizOffline : AppCompatActivity() {
     }
 
     private fun popout(){
-        val popoutNoInput =
-            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
+        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[1]
         popoutTitle.text = chosenPopout[0]
-        popout.setContentView(R.layout.popout_template)
+        popout.setContentView(popoutNoInput)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT

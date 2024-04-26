@@ -19,12 +19,12 @@ object DataStore {
     var gameID = ""
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
     var gameData: MutableMap<String, Any> = hashMapOf()
+    var reconnect = false
 
 
     var db = FirebaseFirestore.getInstance()
 
     fun logQuestionAnswers() {
-        println("DB Funktion logQuestionAnswers angefangen")
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
         docRef.get() // lädt diese collection herunter
             .addOnFailureListener {
@@ -55,9 +55,7 @@ object DataStore {
                         )
                     )
                 }
-                println("DB Funktion logQuestionAnswers beendet")
             }
-
     }
 
     fun createGame() {

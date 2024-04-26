@@ -65,14 +65,13 @@ class ratingOffline : AppCompatActivity() { // KLassennamen camel case
 
     private fun popout(){
         chosenPopout = mutableListOf(getString(R.string.no_rating), getString(R.string.no_rating_explained))
-        val popoutNoInput =
-            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
+        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[1]
         popoutTitle.text = chosenPopout[0]
-        popout.setContentView(R.layout.popout_template)
+        popout.setContentView(popoutNoInput)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT

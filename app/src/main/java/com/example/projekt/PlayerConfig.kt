@@ -19,9 +19,9 @@ class PlayerConfig : AppCompatActivity() {
     private lateinit var toggleButton: ToggleButton
     private lateinit var textName1: EditText
     private lateinit var textName2: EditText
-    private lateinit var settingButton: ImageButton
     private lateinit var gameStartButton: Button
-    private var chosenPopout : MutableList <String> = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained)) // erste Stelle Titel zweite Stelle Erklärung
+    private lateinit var gespeicherteSpiele: ImageButton
+    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,17 +34,19 @@ class PlayerConfig : AppCompatActivity() {
         toggleButton = findViewById(R.id.toggleButton)
         textName1 = findViewById(R.id.textName1)
         textName2 = findViewById(R.id.textName2)
-        settingButton = findViewById(R.id.SettingsButton)
         gameStartButton = findViewById(R.id.gameStartButton)
-        settingButton.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+        gespeicherteSpiele = findViewById(R.id.gespeicherteSpiele)
+        chosenPopout = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained))
         toggleButton.setOnClickListener() {
             onlineOfflinechanger()
         }
         gameStartButton.setOnClickListener {
             goToVeranstaltungswahl()
+        }
+        gespeicherteSpiele.setOnClickListener {
+            DataStore.reconnect = true
+            val intent = Intent(this, OnlineConnection::class.java)
+            startActivity(intent)
         }
     }
 
@@ -66,14 +68,13 @@ class PlayerConfig : AppCompatActivity() {
     }
 
     private fun popout(){
-        val popoutNoInput =
-            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
+        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[1]
         popoutTitle.text = chosenPopout[0]
-        popout.setContentView(R.layout.popout_template)
+        popout.setContentView(popoutNoInput)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
@@ -83,6 +84,7 @@ class PlayerConfig : AppCompatActivity() {
             popout.dismiss()
         }
     }
+
 
     fun onlineOfflinechanger() {
         if (toggleButton.text.toString() == "Offline") {

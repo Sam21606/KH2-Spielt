@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Spielbrett : AppCompatActivity() {
 
-    private lateinit var textViewStufe: TextView
+    private lateinit var textViewBoard: TextView
     private lateinit var buttonSpielbrett: Button
     private lateinit var textViewPlayer1: TextView
     private lateinit var textViewPlayer2 : TextView
@@ -16,7 +16,7 @@ class Spielbrett : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.spielbrett)
+        setContentView(R.layout.board)
 
         init()
     }
@@ -24,11 +24,11 @@ class Spielbrett : AppCompatActivity() {
     private fun init() {
         DataStore.player1OR2 = true
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
-        textViewStufe = findViewById(R.id.textViewStufe)
+        textViewBoard = findViewById(R.id.textViewBoard)
         textViewPlayer1 = findViewById(R.id.textViewPlayer1)
         textViewPlayer2 = findViewById(R.id.textViewPlayer2)
 
-        textViewStufe.text = getString(R.string.stage , DataStore.stage.toString())
+        textViewBoard.text = getString(R.string.stage , DataStore.stage.toString())
         setPunkteanzeigen()
 
         buttonSpielbrett.setOnClickListener {
@@ -59,7 +59,7 @@ class Spielbrett : AppCompatActivity() {
         }
     }
 
-    fun setPunkteanzeigen() {
+    private fun setPunkteanzeigen() {
         textViewPlayer1.text = getString(
             R.string.player1_points ,
             DataStore.playerName1 ,
@@ -67,7 +67,7 @@ class Spielbrett : AppCompatActivity() {
         )
         textViewPlayer2.text = getString(
             R.string.palyer2_points ,
-            DataStore.playerName1 ,
+            DataStore.playerName2 ,
             DataStore.currentPoints2.toString()
         )
     }

@@ -5,5 +5,6 @@
     <color name="yellow">#FDD835</color>
     <color name="grey">#63656C</color>
     <color name="lightGrey">#EAEBF1</color>
+    <color name="highlightedGrey">#8A8EA4</color>
     <color name="backgroundGray">#28292E</color>
 </resources>

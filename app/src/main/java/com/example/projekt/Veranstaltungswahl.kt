@@ -274,8 +274,6 @@ class Veranstaltungswahl : AppCompatActivity() {
             posibileQuestions.add(questioNumbers)
             questioNumbers += 1
         }
-        println("here are the question $posibileQuestions")
-        posibileQuestions.random()
         if (DataStore.gameMode){
             for (i in 0 until DataStore.questionCount){
                 DataStore.questionsPicked.add(posibileQuestions[0])
@@ -287,6 +285,7 @@ class Veranstaltungswahl : AppCompatActivity() {
                 posibileQuestions.removeAt(0)
             }
         }
+        DataStore.questionsPicked.random()
     }
 
 
@@ -305,14 +304,13 @@ class Veranstaltungswahl : AppCompatActivity() {
 
     private fun popout(){
         chosenPopout = mutableListOf(getString(R.string.no_topic), getString(R.string.no_topic_explained))
-        val popoutNoInput =
-            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
+        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[1]
         popoutTitle.text = chosenPopout[0]
-        popout.setContentView(R.layout.popout_template)
+        popout.setContentView(popoutNoInput)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
