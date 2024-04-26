@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 
@@ -20,6 +21,8 @@ class PlayerConfig : AppCompatActivity() {
     private lateinit var textName2: EditText
     private lateinit var settingButton: ImageButton
     private lateinit var gameStartButton: Button
+    private var chosenPopout : MutableList <String> = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained)) // erste Stelle Titel zweite Stelle Erklärung
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +61,24 @@ class PlayerConfig : AppCompatActivity() {
             val intent2 = Intent(this, Veranstaltungswahl::class.java)
             startActivity(intent2)
         } else {
-            popoutNoName()
+            popout()
         }
     }
 
-    private fun popoutNoName() {
-        val popoutNoName =
-            layoutInflater.inflate(R.layout.popout_kein_name_eingetippt, null)
+    private fun popout(){
+        val popoutNoInput =
+            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
-        popout.setContentView(popoutNoName)
+        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
+        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
+        popoutText.text = chosenPopout[1]
+        popoutTitle.text = chosenPopout[0]
+        popout.setContentView(R.layout.popout_template)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
         popout.show()
-        val popoutButton = popoutNoName.findViewById<Button>(R.id.popoutButton)
+        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
         popoutButton.setOnClickListener {
             popout.dismiss()
         }
