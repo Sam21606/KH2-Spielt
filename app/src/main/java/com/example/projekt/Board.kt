@@ -88,7 +88,7 @@ class Board : AppCompatActivity(){
         textViewPlayer1 = findViewById(R.id.textViewPlayer1)
         textViewPlayer2 = findViewById(R.id.textViewPlayer2)
         textViewStufe.text = getString(R.string.Stage_text , DataStore.stage.toString())
-            setPunkteanzeigen()
+        setPunkteanzeigen()
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
         }
