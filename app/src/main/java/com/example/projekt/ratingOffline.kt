@@ -38,7 +38,7 @@ class ratingOffline : AppCompatActivity() { // KLassennamen camel case
     }
 
     private fun startIntent() {
-        var intent = Intent(this, Spielbrett::class.java)
+        val intent = Intent(this, Spielbrett::class.java)
         startActivity(intent)
     }
 

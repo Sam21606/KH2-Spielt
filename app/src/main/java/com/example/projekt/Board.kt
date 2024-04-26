@@ -1,7 +1,6 @@
 package com.example.projekt
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -85,7 +84,7 @@ class Board : AppCompatActivity(){
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
         textViewStufe = findViewById(R.id.textViewStufe)
 
-        textViewStufe.text = "Stufe ${DataStore.stage}"
+        textViewStufe.text = getString(R.string.Stage_text , DataStore.stage.toString())
         setPunkteanzeigen()
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
@@ -158,12 +157,6 @@ class Board : AppCompatActivity(){
         }
     }
 
-
-
-    private fun startIntent(clazz: Class<*>) {
-        val intent = Intent(this, clazz)
-        startActivity(intent)
-    }
     fun setPunkteanzeigen() {
         textViewPlayer1.text = getString(
             R.string.player1_points ,
