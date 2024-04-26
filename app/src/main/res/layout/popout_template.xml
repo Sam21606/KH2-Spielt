@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundGray"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -29,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/no_answer"
                 android:textSize="28sp" />
 
             <TextView
@@ -38,11 +38,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/no_answer_explained"
                 android:textSize="24sp" />
 
             <Button
-        android:backgroundTint="@color/grey"
+                android:backgroundTint="@color/grey"
+                android:textColor="@color/lightGrey"
                 android:id="@+id/popoutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

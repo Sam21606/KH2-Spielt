@@ -38,6 +38,7 @@ class Veranstaltungswahl : AppCompatActivity() {
     private lateinit var checkAusstellung: CheckBox
     private lateinit var textViewPlayerName: TextView
     var db = FirebaseFirestore.getInstance()
+    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -302,18 +303,22 @@ class Veranstaltungswahl : AppCompatActivity() {
         textViewPlayerName.text = DataStore.playerName2
     }
 
-    fun popout(){
-
-        val popoutNoTopic = layoutInflater.inflate(R.layout.popout_kein_thema_gewaehlt, null)
+    private fun popout(){
+        chosenPopout = mutableListOf(getString(R.string.no_topic), getString(R.string.no_topic_explained))
+        val popoutNoInput =
+            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
-        popout.setContentView(popoutNoTopic)
+        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
+        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
+        popoutText.text = chosenPopout[1]
+        popoutTitle.text = chosenPopout[0]
+        popout.setContentView(R.layout.popout_template)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
         popout.show()
-
-        val popoutButton = popoutNoTopic.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener() {
+        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
+        popoutButton.setOnClickListener {
             popout.dismiss()
         }
     }

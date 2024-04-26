@@ -44,7 +44,7 @@ class Board : AppCompatActivity(){
 
     private var ediTextInput = ""
     var db = FirebaseFirestore.getInstance()
-    private var chosenPopout = R.layout.popout_kein_name_eingetippt
+    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
 
 
@@ -255,7 +255,7 @@ class Board : AppCompatActivity(){
     private fun checkBewertung() {
         val pointsFromRating = ratingBewertung.rating.toInt()
         if (pointsFromRating == 0) {
-            chosenPopout = R.layout.popout_keine_bewertung_gegeben
+            chosenPopout = mutableListOf(getString(R.string.no_rating),getString(R.string.no_rating_explained))
             popout()
         } else {
             DataStore.stage += 1
@@ -287,15 +287,19 @@ class Board : AppCompatActivity(){
     }
 
     private fun popout(){
-        val popoutNoName =
-            layoutInflater.inflate(chosenPopout, null)
+        val popoutNoInput =
+            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
-        popout.setContentView(popoutNoName)
+        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
+        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
+        popoutText.text = chosenPopout[1]
+        popoutTitle.text = chosenPopout[0]
+        popout.setContentView(R.layout.popout_template)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
         popout.show()
-        val popoutButton = popoutNoName.findViewById<Button>(R.id.popoutButton)
+        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
         popoutButton.setOnClickListener {
             popout.dismiss()
         }
@@ -316,7 +320,7 @@ class Board : AppCompatActivity(){
         nextQuestion()
         quizWeiterOnline.setOnClickListener {
             if (toggleButtonClicked == 0){
-                chosenPopout = R.layout.popout_keine_antwort_gegeben
+                chosenPopout = mutableListOf(getString(R.string.no_answer), getString(R.string.no_answer_explained))
                 popout()
             }else{
                 nextQuestion()

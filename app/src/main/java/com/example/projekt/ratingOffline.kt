@@ -16,7 +16,9 @@ class ratingOffline : AppCompatActivity() { // KLassennamen camel case
     private lateinit var ratingBewertung: RatingBar
     private lateinit var buttonWeiterBewertung: Button
     private lateinit var playerToRateText: TextView
-    var rating1 = 0
+    private var rating1 = 0
+    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,16 +63,21 @@ class ratingOffline : AppCompatActivity() { // KLassennamen camel case
         }
     }
 
-    private fun popout(){// ALERTDIALOG
-        val popoutNoName =
-            layoutInflater.inflate(R.layout.popout_keine_bewertung_gegeben, null)
+    private fun popout(){
+        chosenPopout = mutableListOf(getString(R.string.no_rating), getString(R.string.no_rating_explained))
+        val popoutNoInput =
+            layoutInflater.inflate(R.layout.popout_template, null)
         val popout = Dialog(this)
-        popout.setContentView(popoutNoName)
+        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
+        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
+        popoutText.text = chosenPopout[1]
+        popoutTitle.text = chosenPopout[0]
+        popout.setContentView(R.layout.popout_template)
         popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
         popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
         popout.show()
-        val popoutButton = popoutNoName.findViewById<Button>(R.id.popoutButton)
+        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
         popoutButton.setOnClickListener {
             popout.dismiss()
         }
