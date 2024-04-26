@@ -11,14 +11,12 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
+class ratingOffline : AppCompatActivity() { // KLassennamen camel case
 
     private lateinit var ratingBewertung: RatingBar
     private lateinit var buttonWeiterBewertung: Button
     private lateinit var playerToRateText: TextView
-    private var playerToRate = 0
     var rating1 = 0
-    var rating2 = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +30,8 @@ class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
         ratingBewertung = findViewById(R.id.ratingBewertung)
         buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
         playerToRateText = findViewById(R.id.playerToRate)
-        playerToRateText.text = getString(R.string.bewerte_nun , DataStore.playerName1)
+        playerToRateText.text = getString(R.string.bewerte_nun , DataStore.playerName2)
+        DataStore.player1OR2 = true
         buttonWeiterBewertung.setOnClickListener {
             bewertungAusleser()
         }
@@ -44,19 +43,21 @@ class BewertungOffline : AppCompatActivity() { // KLassennamen camel case
     }
 
     private fun bewertungAusleser() {
-        if (playerToRate == 0){
-            rating1 = ratingBewertung.rating.toInt()
-            playerToRate = 1
-            playerToRateText.text = getString(R.string.bewerte_nun2 , DataStore.playerName2)
-        }else if (playerToRate == 1){
-            rating2 = ratingBewertung.rating.toInt()
-        }
-        if (rating1 == 0) {
-            popout()
-        } else if (rating2 == 0) {
-            popout()
-        }else {
+        rating1 = ratingBewertung.rating.toInt()
+        if (rating1 != 0){
+            if(DataStore.player1OR2){
+                DataStore.currentPoints2 = rating1
+                playerToRateText.text = getString(R.string.bewerte_nun2 , DataStore.playerName1)
+                rating1 = 0
+                DataStore.player1OR2 = false
+                ratingBewertung.rating = 0F
+            }else{
+                DataStore.currentPoints1 = rating1
+                DataStore.stage = 2
                 startIntent()
+            }
+        }else{
+            popout()
         }
     }
 

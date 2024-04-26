@@ -3,21 +3,15 @@ package com.example.projekt
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class Spielbrett : AppCompatActivity() {
 
-    lateinit var textViewStufe: TextView
-    var punkteanzeige1 = 0
-    var punkteanzeige2 = 0
-    lateinit var buttonSpielbrett: Button
-    lateinit var infoButton: ImageButton
-    lateinit var chatButton: ImageButton
-    lateinit var homeButton: ImageButton
-    lateinit var textViewPunkte1: TextView
-    lateinit var textViewPunkte2: TextView
+    private lateinit var textViewStufe: TextView
+    private lateinit var buttonSpielbrett: Button
+    private lateinit var textViewPlayer1: TextView
+    private lateinit var textViewPlayer2 : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,36 +22,18 @@ class Spielbrett : AppCompatActivity() {
     }
 
     private fun init() {
+        DataStore.player1OR2 = true
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
-        infoButton = findViewById(R.id.infoButton)
-        chatButton = findViewById(R.id.chatButton)
-        homeButton = findViewById(R.id.homeButton)
-        textViewPunkte1 = findViewById(R.id.textViewPunkte1)
-        textViewPunkte2 = findViewById(R.id.textViewPunkte2)
         textViewStufe = findViewById(R.id.textViewStufe)
+        textViewPlayer1 = findViewById(R.id.textViewPlayer1)
+        textViewPlayer2 = findViewById(R.id.textViewPlayer2)
 
-        textViewStufe.text = "Stufe ${DataStore.stage}"
+        textViewStufe.text = getString(R.string.stage , DataStore.stage.toString())
         setPunkteanzeigen()
 
-        infoButton.setOnClickListener {
-            startIntent(Info::class.java)
-        }
-        chatButton.setOnClickListener {
-            startIntent(Chat::class.java)
-        }
-        homeButton.setOnClickListener {
-            startIntent(PlayerConfig::class.java)
-
-        }
-        infoButton.setOnClickListener {
-            setPunkteanzeigen()
-        }
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
-            println("${DataStore.stage}")
         }
-        DataStore.currentPoints1 = punkteanzeige1
-        DataStore.currentPoints2 = punkteanzeige2
     }
 
     private fun startIntent(clazz: Class<*>) {
@@ -69,16 +45,13 @@ class Spielbrett : AppCompatActivity() {
 
         when (DataStore.stage) {
             1 -> {
-                val intent = Intent(this, EreignisskarteOffline::class.java)
-                startActivity(intent)
+                startIntent(Ereignisskarte::class.java)
             }
             2 -> {
-                val intent = Intent(this, QuizOffline::class.java)
-                startActivity(intent)
+                startIntent(QuizOffline::class.java)
             }
             3 -> {
-                val intent = Intent(this, Stufe4Offline::class.java)
-                startActivity(intent)
+                startIntent(Stufe4Offline::class.java)
             }
             4 -> {
                 println("${DataStore.stage}")
@@ -87,11 +60,15 @@ class Spielbrett : AppCompatActivity() {
     }
 
     fun setPunkteanzeigen() {
-        val bewertungOffline = BewertungOffline()
-
-        punkteanzeige1 = bewertungOffline.rating1
-        punkteanzeige2 = bewertungOffline.rating2
-        textViewPunkte1.text = punkteanzeige1.toString()
-        textViewPunkte2.text = punkteanzeige2.toString()
+        textViewPlayer1.text = getString(
+            R.string.player1_points ,
+            DataStore.playerName1 ,
+            DataStore.currentPoints1.toString()
+        )
+        textViewPlayer2.text = getString(
+            R.string.palyer2_points ,
+            DataStore.playerName1 ,
+            DataStore.currentPoints2.toString()
+        )
     }
 }

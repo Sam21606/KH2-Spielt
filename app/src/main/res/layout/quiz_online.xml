@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
         android:backgroundTint="@color/grey"
+        android:textColor="@color/white"
         android:id="@+id/quizWeiterOnline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,28 +22,35 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="96dp"
+        android:layout_width="274dp"
+        android:layout_height="274dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFrageQuiz">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ToggleButton
             android:id="@+id/buttonAnswer4Online"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/buttonAnswer3Online"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/buttonAnswer3Online"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer3Online" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ToggleButton
             android:id="@+id/buttonAnswer3Online"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAnswer4Online"
             app:layout_constraintEnd_toEndOf="@+id/buttonAnswer2Online"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/buttonAnswer2Online"
             app:layout_constraintTop_toBottomOf="@+id/buttonAnswer2Online" />
 
@@ -49,28 +58,45 @@
             android:id="@+id/buttonAnswer2Online"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAnswer4Online"
             app:layout_constraintEnd_toEndOf="@+id/buttonAnswer1Online"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/buttonAnswer1Online"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer1Online" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer1Online"
+            app:layout_constraintVertical_bias="0.19999999" />
 
         <ToggleButton
             android:id="@+id/buttonAnswer1Online"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/textViewFrageQuiz"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="1dp"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/playerName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/playerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

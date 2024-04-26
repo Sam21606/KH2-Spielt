@@ -54,7 +54,8 @@ class PlayerConfig : AppCompatActivity() {
             val intent = Intent(this, OnlineConnection::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {
-            val intent2 = Intent(this, VeranstaltungswahlOffline1::class.java)
+            DataStore.logQuestionAnswers()
+            val intent2 = Intent(this, Veranstaltungswahl::class.java)
             startActivity(intent2)
         } else {
             popoutNoName()

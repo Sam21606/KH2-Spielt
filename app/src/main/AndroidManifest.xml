@@ -54,14 +54,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VeranstaltungswahlOffline1"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".Spielbrett"
             android:exported="true">
             <intent-filter>
@@ -69,23 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Chat"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Info"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".BewertungOffline"
+            android:name=".ratingOffline"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -109,7 +85,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EreignisskarteOffline"
+            android:name=".Ereignisskarte"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

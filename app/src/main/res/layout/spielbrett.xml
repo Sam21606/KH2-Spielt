@@ -1,98 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageButton
-        android:id="@+id/homeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_mapmode" />
-
-    <ImageButton
-        android:id="@+id/chatButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewChat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_send" />
-
-    <TextView
-        android:id="@+id/textViewChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Chat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/chatButton"
-        app:layout_constraintStart_toStartOf="@+id/chatButton" />
-
-    <TextView
-        android:id="@+id/textViewHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        app:layout_constraintEnd_toEndOf="@+id/homeButton"
-        app:layout_constraintStart_toStartOf="@+id/homeButton"
-        app:layout_constraintTop_toBottomOf="@+id/homeButton" />
-
-    <ImageButton
-        android:id="@+id/infoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_info_details" />
-
-    <TextView
-        android:id="@+id/textViewInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Info"
-        app:layout_constraintEnd_toEndOf="@+id/infoButton"
-        app:layout_constraintStart_toStartOf="@+id/infoButton"
-        app:layout_constraintTop_toBottomOf="@+id/infoButton" />
 
     <TextView
         android:id="@+id/textViewStufe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stufe X"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/homeButton"
-        app:layout_constraintEnd_toStartOf="@+id/homeButton"
-        app:layout_constraintStart_toEndOf="@+id/infoButton"
-        app:layout_constraintTop_toTopOf="@+id/homeButton" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.108" />
 
     <ImageView
         android:id="@+id/imagePlayer1"
         android:layout_width="74dp"
         android:layout_height="92dp"
-        android:layout_marginStart="96dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonSpielbrett"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSpielbrett"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.759"
         app:srcCompat="@android:drawable/ic_menu_myplaces" />
 
     <ImageView
         android:id="@+id/imagePlayer2"
         android:layout_width="74dp"
         android:layout_height="92dp"
-        android:layout_marginStart="28dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imagePlayer1"
-        app:layout_constraintStart_toEndOf="@+id/imagePlayer1"
-        app:layout_constraintTop_toTopOf="@+id/imagePlayer1"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSpielbrett"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/buttonSpielbrett"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76"
         app:srcCompat="@android:drawable/ic_menu_myplaces" />
 
     <TextView
@@ -113,33 +60,18 @@
         app:layout_constraintEnd_toEndOf="@+id/imagePlayer2"
         app:layout_constraintStart_toStartOf="@+id/imagePlayer2" />
 
-    <TextView
-        android:id="@+id/textViewPunkte2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/textViewPunkte1"
-        app:layout_constraintStart_toStartOf="@+id/textViewPunkte1"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPunkte1" />
-
-    <TextView
-        android:id="@+id/textViewPunkte1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/infoButton"
-        app:layout_constraintStart_toStartOf="@+id/infoButton"
-        app:layout_constraintTop_toBottomOf="@+id/textViewInfo" />
-
     <Button
-        android:backgroundTint="@color/grey"
+        android:textColor="@color/lightGrey"
         android:id="@+id/buttonSpielbrett"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/grey"
         android:text="@string/continue_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.937" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ class Veranstaltungswahl : AppCompatActivity() {
     private lateinit var checkPerformance: CheckBox
     private lateinit var checkOper: CheckBox
     private lateinit var checkAusstellung: CheckBox
-    private lateinit var textViewSpieler1online: TextView
+    private lateinit var textViewPlayerName: TextView
     var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         checkPerformance = findViewById(R.id.checkPerformance)
         checkOper = findViewById(R.id.checkOper)
         checkAusstellung = findViewById(R.id.checkAusstellung)
-        textViewSpieler1online = findViewById(R.id.textViewSpieler1online)
+        textViewPlayerName = findViewById(R.id.textViewPlayerName)
 
         setListener(
             checkAusstellung,
@@ -70,47 +70,93 @@ class Veranstaltungswahl : AppCompatActivity() {
         )
 
         continueVeranstaltung.setOnClickListener {
-            getTopicFromFirebase()
+            if (DataStore.gameMode){
+                getTopicFromFirebase()
+            }else{
+                popoutWhenNoInputElseNewLayout()
+            }
+
         }
-        textViewSpieler1online.text = DataStore.playerName1
+        textViewPlayerName.text = DataStore.playerName1
     }
 
-    fun checkIfThemaMatch() {
-        checkboxCheck()
-        giveTopicToFirebase()
-        checkIfThereIsTopicFromFirebase()
-
-    }
-
-    fun checkWhatTopicMatches() {
-        if (theater1 && theater2) {
-            themaSet.add("Theater")
-        }
-        if (oper1 && oper2) {
-            themaSet.add("Oper")
-        }
-        if (ausstellung1 && ausstellung2) {
-            themaSet.add("Ausstellung")
-        }
-        if (lesung1 && lesung2) {
-            themaSet.add("Lesung")
-        }
-        if (konzert1 && konzert2) {
-            themaSet.add("Konzert")
-        }
-        if (performance1 && performance2) {
-            themaSet.add("Performance")
-        }
-        if (themaSet.isEmpty()) {
-            ifNoMatchChooseRandom()
+    private fun getTopicFromFirebase() {
+        if (DataStore.player1OR2) {
+            val docRef = db.collection("Games").document(DataStore.gameID)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    theater2 = document.getString("theater2").toBoolean()
+                    oper2 = document.getString("oper2").toBoolean()
+                    ausstellung2 = document.getString("ausstellung2").toBoolean()
+                    lesung2 = document.getString("lesung2").toBoolean()
+                    konzert2 = document.getString("konzert2").toBoolean()
+                    performance2 = document.getString("performance2").toBoolean()
+                    popoutWhenNoInputElseNewLayout()
+                }
         } else {
-            updateTopicInDS()
+
+            val docRef = db.collection("Games").document(DataStore.gameID)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    theater1 = document.getString("theater1").toBoolean()
+                    oper1 = document.getString("oper1").toBoolean()
+                    ausstellung1 = document.getString("ausstellung1").toBoolean()
+                    lesung1 = document.getString("lesung1").toBoolean()
+                    konzert1 = document.getString("konzert1").toBoolean()
+                    performance1 = document.getString("performance1").toBoolean()
+                    popoutWhenNoInputElseNewLayout()
+                }
+        }
+    }
+
+    private fun popoutWhenNoInputElseNewLayout() {
+        if (DataStore.player1OR2) {
+            if (!ausstellung1 && !lesung1 && !konzert1 && !oper1 && !performance1 && !theater1) {
+                popout()
+            } else {
+                if (DataStore.gameMode){
+                    checkboxCheck()
+                    checkIfThereIsTopicFromFirebase()
+                }else{
+                    checkboxCheck()
+                    DataStore.player1OR2 = false
+                    resetView()
+                }
+            }
+        } else {
+            if (!ausstellung2 && !lesung2 && !konzert2 && !oper2 && !performance2 && !theater2) {
+                popout()
+            } else {
+                checkboxCheck()
+                checkIfThereIsTopicFromFirebase()
+            }
+        }
+    }
+
+
+    fun checkboxCheck() {
+        if (DataStore.player1OR2) {
+            ausstellung1 = checkAusstellung.isChecked
+            lesung1 = checkLesung.isChecked
+            konzert1 = checkKonzert.isChecked
+            oper1 = checkOper.isChecked
+            performance1 = checkPerformance.isChecked
+            theater1 = checkTheater.isChecked
+        } else {
+
+            ausstellung2 = checkAusstellung.isChecked
+            lesung2 = checkLesung.isChecked
+            konzert2 = checkKonzert.isChecked
+            oper2 = checkOper.isChecked
+            performance2 = checkPerformance.isChecked
+            theater2 = checkTheater.isChecked
         }
     }
 
     private fun checkIfThereIsTopicFromFirebase() {
         if (DataStore.player1OR2) {
             if (!theater2 && !oper2 && !ausstellung2 && !lesung2 && !konzert2 && !performance2) {
+                giveTopicToFirebase()
                 val intent = Intent(this, WartenAufMitspieler::class.java)
                 startActivity(intent)
             } else {
@@ -118,6 +164,7 @@ class Veranstaltungswahl : AppCompatActivity() {
             }
         } else {
             if (!theater1 && !oper1 && !ausstellung1 && !lesung1 && !konzert1 && !performance1) {
+                giveTopicToFirebase()
                 val intent = Intent(this, WartenAufMitspieler::class.java)
                 startActivity(intent)
             } else {
@@ -153,35 +200,31 @@ class Veranstaltungswahl : AppCompatActivity() {
         }
     }
 
-    private fun getTopicFromFirebase() {
-        if (DataStore.player1OR2) {
-            val docRef = db.collection("Games").document(DataStore.gameID)
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    theater2 = document.getString("theater2").toBoolean()
-                    oper2 = document.getString("oper2").toBoolean()
-                    ausstellung2 = document.getString("ausstellung2").toBoolean()
-                    lesung2 = document.getString("lesung2").toBoolean()
-                    konzert2 = document.getString("konzert2").toBoolean()
-                    performance2 = document.getString("performance2").toBoolean()
-                    popoutWhenNoInputElseNewLayout()
-                }
+    fun checkWhatTopicMatches() {
+        if (theater1 && theater2) {
+            themaSet.add("Theater")
+        }
+        if (oper1 && oper2) {
+            themaSet.add("Oper")
+        }
+        if (ausstellung1 && ausstellung2) {
+            themaSet.add("Ausstellung")
+        }
+        if (lesung1 && lesung2) {
+            themaSet.add("Lesung")
+        }
+        if (konzert1 && konzert2) {
+            themaSet.add("Konzert")
+        }
+        if (performance1 && performance2) {
+            themaSet.add("Performance")
+        }
+        if (themaSet.isEmpty()) {
+            ifNoMatchChooseRandom()
         } else {
-
-            val docRef = db.collection("Games").document(DataStore.gameID)
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    theater1 = document.getString("theater1").toBoolean()
-                    oper1 = document.getString("oper1").toBoolean()
-                    ausstellung1 = document.getString("ausstellung1").toBoolean()
-                    lesung1 = document.getString("lesung1").toBoolean()
-                    konzert1 = document.getString("konzert1").toBoolean()
-                    performance1 = document.getString("performance1").toBoolean()
-                    popoutWhenNoInputElseNewLayout()
-                }
+            updateTopicInDS()
         }
     }
-
     fun ifNoMatchChooseRandom() {
         if (themaSet.size == 0) {
             if (theater1 || theater2) {
@@ -212,58 +255,51 @@ class Veranstaltungswahl : AppCompatActivity() {
         random = (0 until (themaSet.size)).random()
         DataStore.topic = themaSet[random]
         selectQuestions()
-        DataStore.answer = hashMapOf(
-            "topic" to DataStore.topic,
-            "questionsPicked" to DataStore.questionsPicked
-        )
-        DataStore.updateAnswerInDB()
+        if(DataStore.gameMode){
+            DataStore.answer = hashMapOf(
+                "topic" to DataStore.topic,
+                "questionsPicked" to DataStore.questionsPicked
+            )
+            DataStore.updateAnswerInDB()
+        }
         val intent = Intent(this, ThemaErgebnis::class.java)
         startActivity(intent)
     }
 
     private fun selectQuestions() {
-        var questioNumbers = 1
-        // Logik um Fragen nach Thema auszuwählen
-        for (i in 0 until  DataStore.questionCount){
-            DataStore.questionsPicked.add(questioNumbers)
+        var questioNumbers = 0
+        var posibileQuestions: MutableList<Int> = mutableListOf()
+        for (i in 0 until  DataStore.questions.size){
+            posibileQuestions.add(questioNumbers)
             questioNumbers += 1
         }
-        DataStore.questionsPicked.random()
-    }
-
-    fun checkboxCheck() {
-        if (DataStore.player1OR2) {
-            ausstellung1 = checkAusstellung.isChecked
-            lesung1 = checkLesung.isChecked
-            konzert1 = checkKonzert.isChecked
-            oper1 = checkOper.isChecked
-            performance1 = checkPerformance.isChecked
-            theater1 = checkTheater.isChecked
-        } else {
-
-            ausstellung2 = checkAusstellung.isChecked
-            lesung2 = checkLesung.isChecked
-            konzert2 = checkKonzert.isChecked
-            oper2 = checkOper.isChecked
-            performance2 = checkPerformance.isChecked
-            theater2 = checkTheater.isChecked
+        println("here are the question $posibileQuestions")
+        posibileQuestions.random()
+        if (DataStore.gameMode){
+            for (i in 0 until DataStore.questionCount){
+                DataStore.questionsPicked.add(posibileQuestions[0])
+                posibileQuestions.removeAt(0)
+            }
+        }else{
+            for (i in 0 until DataStore.questionCount * 2){
+                DataStore.questionsPicked.add(posibileQuestions[0])
+                posibileQuestions.removeAt(0)
+            }
         }
     }
 
-    private fun popoutWhenNoInputElseNewLayout() {
-        if (DataStore.player1OR2) {
-            if (!ausstellung1 && !lesung1 && !konzert1 && !oper1 && !performance1 && !theater1) {
-                popout()
-            } else {
-                checkIfThemaMatch()
-            }
-        } else {
-            if (!ausstellung2 && !lesung2 && !konzert2 && !oper2 && !performance2 && !theater2) {
-                popout()
-            } else {
-                checkIfThemaMatch()
-            }
-        }
+
+
+
+
+    private fun resetView() {
+        checkAusstellung.isChecked = false
+        checkLesung.isChecked = false
+        checkKonzert.isChecked = false
+        checkOper.isChecked = false
+        checkPerformance.isChecked = false
+        checkTheater.isChecked = false
+        textViewPlayerName.text = DataStore.playerName2
     }
 
     fun popout(){

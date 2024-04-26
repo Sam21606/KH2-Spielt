@@ -1,129 +1,246 @@
 package com.example.projekt
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 
 class QuizOffline : AppCompatActivity() {
-    lateinit var quizWeiterOffline: Button
-    private lateinit var buttonAnswer1Offline: ToggleButton
-    private lateinit var buttonAnswer2Offline: ToggleButton
-    private lateinit var buttonAnswer3Offline: ToggleButton
-    private lateinit var buttonAnswer4Offline: ToggleButton
-    private lateinit var answer1TextOffline: String
-    private lateinit var answer2TextOffline: String
-    private lateinit var answer3TextOffline: String
-    private lateinit var answer4TextOffline: String
+    private lateinit var quizWeiterOnline: Button
+    private lateinit var buttonAnswer1Online: ToggleButton // inizieert die einzelnen Buttons sodass sie im code aufrufbar sind aber noch keinen Value besitzten
+    private lateinit var buttonAnswer2Online: ToggleButton
+    private lateinit var buttonAnswer3Online: ToggleButton
+    private lateinit var buttonAnswer4Online: ToggleButton
+    private lateinit var textViewFrageQuiz: TextView
+    private lateinit var playerName : TextView
+    private var questionNumber = 0
     private var questionID: String = ""
+    private var clickedAnswerID = "0"
     private lateinit var questionText: String
-    private lateinit var textViewFrageQuizOffline: TextView
-    private var questionsChosen = mutableListOf<String>("")
-
-    var answered1 = false
-    var answered2 = false
-    var answered3 = false
-    var answered4 = false
-    var questionNumber = 1
-    var choosedQuestion = 5//Spieler gewählte Anzahl an Fragen
+    private var answer1Text: String? = null
+    private lateinit var answer2Text: String
+    private lateinit var answer3Text: String
+    private lateinit var answer4Text: String
+    private var questionsChosen = mutableListOf("")
+    private var matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
+    private var matchAnswersText = matchedAnswers.map { it.text }
+    private var matchAnswersId = matchedAnswers.map { it.ID }
+    private var choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID }
+    private var correctAnswer = matchedAnswers.filter { it.correct == "true" }
+    private var toggleButtonClicked = 0
+    private var chosenPopout = R.layout.popout_kein_name_eingetippt
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.quiz_offline)
+        setContentView(R.layout.quiz_online)
 
         init()
     }
 
     private fun init() {
         DataStore.stage = 3
-        quizWeiterOffline = findViewById(R.id.quizWeiterOffline)
-        buttonAnswer1Offline = findViewById(R.id.buttonAnswer1Offline)
-        buttonAnswer2Offline = findViewById(R.id.buttonAnswer2Offline)
-        buttonAnswer3Offline = findViewById(R.id.buttonAnswer3Offline)
-        buttonAnswer4Offline = findViewById(R.id.buttonAnswer4Offline)
-        textViewFrageQuizOffline = findViewById(R.id.textViewFrageQuizOffline)
-        quizWeiterOffline.setOnClickListener {
-            nextQuestion()
-        }
-        buttonAnswer1Offline.setOnClickListener {
-            answerClicked()
-        }
-        buttonAnswer2Offline.setOnClickListener {
-            answerClicked()
-        }
-        buttonAnswer3Offline.setOnClickListener {
-            answerClicked()
-        }
-        buttonAnswer4Offline.setOnClickListener {
-            answerClicked()
-        }
-        selectQuestion()
-    }
+        quizWeiterOnline = findViewById(R.id.quizWeiterOnline)
+        buttonAnswer1Online = findViewById(R.id.buttonAnswer1Online)
+        buttonAnswer2Online = findViewById(R.id.buttonAnswer2Online)
+        buttonAnswer3Online = findViewById(R.id.buttonAnswer3Online)
+        buttonAnswer4Online = findViewById(R.id.buttonAnswer4Online)
+        textViewFrageQuiz = findViewById(R.id.textViewFrageQuiz)
+        playerName = findViewById(R.id.playerName)
 
-    private fun answerClicked() {
-        // sezte alle anderen buttons auf off
-    }
+        playerName.text = DataStore.playerName1
+        nextQuestion()
+        quizWeiterOnline.setOnClickListener {
+            if (toggleButtonClicked == 0){
+                chosenPopout = R.layout.popout_keine_antwort_gegeben
+                popout()
+            }else{
+                nextQuestion()
+            }
+        }
+        buttonAnswer1Online.setOnClickListener {
+            button1Clicked()
+        }
+        buttonAnswer2Online.setOnClickListener {
+            button2Clicked()
+        }
+        buttonAnswer3Online.setOnClickListener {
+            button3Clicked()
+        }
+        buttonAnswer4Online.setOnClickListener {
+            button4Clicked()
+        }
 
-    fun checkAnswer() {
-        //überprüft welche antwort
     }
-
-    fun nextQuestion() {
-        selectQuestion()
-        if (questionNumber == choosedQuestion + 1) {
-            val intent = Intent(this, Spielbrett::class.java)
+    private fun nextQuestion() {
+        //Prüft ob noch eine neue Frage angezeigt werden muss
+        if (questionNumber == DataStore.questionCount * 2) {//questionCount = Anzahl an Fragen pro Spieler
+            addPoints()
+            DataStore.player1OR2 = true
+            intent = Intent(this, Spielbrett::class.java)
             startActivity(intent)
+        }else if (questionNumber != 0) {
+            // Löst neuen Fragevorgang aus
+            addPoints()
+            selectQuestion()
+            toggleButtonClicked = 0
+        }else{
+            // Löst ersten Fragevorgang aus
+            selectQuestion()
+        }
+
+    }
+
+    private fun addPoints() {
+        //Prüft ob Antwort stimmt
+        if (choosenanswer == correctAnswer) {
+            if (questionNumber == DataStore.questionCount + 1){
+                DataStore.player1OR2 = false
+                playerName.text = DataStore.playerName2
+            }
+            if (DataStore.player1OR2) {
+                DataStore.currentPoints1 += 1
+                println("Punkte")
+            } else {
+                DataStore.currentPoints2 += 1
+                println("Punkte2")
+            }
+        }else{
+            println("Du bist dumm ${DataStore.player1OR2}")
         }
     }
 
-    fun selectQuestion() {
-        if (questionsChosen.contains(questionID)) {
-            chooseNewRandomQuestion()
-            selectQuestion()
-            println("Ich funktioniere")
-            setTextEtcToChosenQuestio()
-        } else if (!questionsChosen.contains(questionID)) {
-            setTextEtcToChosenQuestio()
-            questionNumber += 1
-        }
+    private fun selectQuestion() {
+        // remove current question from DS
+        setNewRandomQuestion()
+        setTextEtcToChosenQuestio()
+        questionNumber += 1
+    }
 
+
+
+    private fun setNewRandomQuestion() {
+        questionID = DataStore.questions[DataStore.questionsPicked[questionNumber]].ID
+        questionText = DataStore.questions[DataStore.questionsPicked[questionNumber]].text
+        textViewFrageQuiz.text = questionText
     }
 
     fun setTextEtcToChosenQuestio() {
+        // setzt den text der Buttons zu Fragen und Antwort
 
-
-        val matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
-        val matchAnswersText = matchedAnswers.map { it.text }
+        //Speichert Fragen und Antworten in einzelnen Variabeln
+        matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
+        matchAnswersText = matchedAnswers.map { it.text }
+        matchAnswersId = matchedAnswers.map { it.ID }
+        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID }
+        correctAnswer = matchedAnswers.filter { it.correct == "true" }
         questionsChosen.add(questionID)
 
-        answer1TextOffline = matchAnswersText[0]
-        answer2TextOffline = matchAnswersText[1]
-        answer3TextOffline = matchAnswersText[2]
-        answer4TextOffline = matchAnswersText[3]
+        // Definiert Variable mit dem Text
+        answer1Text = matchAnswersText[0]
+        answer2Text = matchAnswersText[1]
+        answer3Text = matchAnswersText[2]
+        answer4Text = matchAnswersText[3]
 
-        buttonAnswer1Offline.textOff = answer1TextOffline
-        buttonAnswer1Offline.text = answer1TextOffline
-        buttonAnswer1Offline.textOn = answer1TextOffline
-        buttonAnswer2Offline.textOff = answer2TextOffline
-        buttonAnswer2Offline.text = answer2TextOffline
-        buttonAnswer2Offline.textOn = answer2TextOffline
-        buttonAnswer3Offline.textOff = answer3TextOffline
-        buttonAnswer3Offline.text = answer3TextOffline
-        buttonAnswer3Offline.textOn = answer3TextOffline
-        buttonAnswer4Offline.textOff = answer4TextOffline
-        buttonAnswer4Offline.text = answer4TextOffline
-        buttonAnswer4Offline.textOn = answer4TextOffline
+        // Definiert Text der Buttons
+        buttonAnswer1Online.textOff = answer1Text
+        buttonAnswer1Online.text = answer1Text
+        buttonAnswer1Online.textOn = answer1Text
+        buttonAnswer2Online.textOff = answer2Text
+        buttonAnswer2Online.text = answer2Text
+        buttonAnswer2Online.textOn = answer2Text
+        buttonAnswer3Online.textOff = answer3Text
+        buttonAnswer3Online.text = answer3Text
+        buttonAnswer3Online.textOn = answer3Text
+        buttonAnswer4Online.textOff = answer4Text
+        buttonAnswer4Online.text = answer4Text
+        buttonAnswer4Online.textOn = answer4Text
+    }
+    private fun button1Clicked() {
+        toggleButtonClicked = 1
+        changeToggleButtonStyle()
+        clickedAnswerID = matchAnswersId[0]
+        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
+        println ("teeeeeeeeest $choosenanswer")
     }
 
-    fun chooseNewRandomQuestion() {
-        var random: Int = (0 until (DataStore.questions.size)).random()
-        questionID = DataStore.questions[random].ID
-        questionText = DataStore.questions[random].text
 
-        println("$questionID $questionText")
-        textViewFrageQuizOffline.text = questionText
+
+    private fun button2Clicked() {
+        toggleButtonClicked = 2
+        changeToggleButtonStyle()
+        clickedAnswerID = matchAnswersId[1]
+        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID  }
+        println ("teeeeeeeeest $choosenanswer")
+    }
+
+    private fun button3Clicked() {
+        toggleButtonClicked = 3
+        changeToggleButtonStyle()
+        clickedAnswerID = matchAnswersId[2]
+        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
+        println ("teeeeeeeeest $choosenanswer $clickedAnswerID $matchedAnswers")
+    }
+
+    private fun button4Clicked() {
+        toggleButtonClicked = 4
+        changeToggleButtonStyle()
+        clickedAnswerID = matchAnswersId[3]
+        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
+        println ("teeeeeeeeest $choosenanswer")
+    }
+
+    private fun changeToggleButtonStyle() {
+        when (toggleButtonClicked){
+            1 -> {
+                buttonAnswer1Online.text = "ausgewählt"
+                buttonAnswer2Online.text
+                buttonAnswer3Online.text
+                buttonAnswer4Online.text
+            }
+            2 -> {
+                buttonAnswer1Online
+                buttonAnswer2Online.text = "ausgewählt"
+                buttonAnswer3Online
+                buttonAnswer4Online
+
+            }
+            3 -> {
+                buttonAnswer1Online
+                buttonAnswer2Online
+                buttonAnswer3Online.text = "ausgewählt"
+                buttonAnswer4Online
+
+            }
+            4 -> {
+                buttonAnswer1Online
+                buttonAnswer2Online
+                buttonAnswer3Online
+                buttonAnswer4Online.text = "ausgewählt"
+
+            }
+
+        }
+    }
+
+    private fun popout(){
+        val popoutNoName =
+            layoutInflater.inflate(chosenPopout, null)
+        val popout = Dialog(this)
+        popout.setContentView(popoutNoName)
+        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
+        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
+        popout.show()
+        val popoutButton = popoutNoName.findViewById<Button>(R.id.popoutButton)
+        popoutButton.setOnClickListener {
+            popout.dismiss()
+        }
     }
 }

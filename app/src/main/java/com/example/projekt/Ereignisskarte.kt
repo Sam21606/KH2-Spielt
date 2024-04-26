@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-class EreignisskarteOffline : AppCompatActivity() {
+class Ereignisskarte : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +17,7 @@ class EreignisskarteOffline : AppCompatActivity() {
     private fun init() {
         val buttonWeiterEreigniskarte = findViewById<Button>(R.id.buttonWeiterEreigniskarte)
         buttonWeiterEreigniskarte.setOnClickListener {
-            intent = Intent(this, BewertungOffline::class.java)
+            intent = Intent(this, ratingOffline::class.java)
             startActivity(intent)
         }
     }

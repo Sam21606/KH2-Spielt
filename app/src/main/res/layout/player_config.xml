@@ -33,6 +33,7 @@
 
     <Button
         android:backgroundTint="@color/grey"
+        android:textColor="@color/white"
         android:id="@+id/gameStartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,6 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/grey"
         android:textOff="@string/online"
         android:textOn="@string/offline"
         app:layout_constraintEnd_toEndOf="parent"

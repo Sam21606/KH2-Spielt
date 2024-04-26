@@ -4,6 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FDD835</color>
     <color name="grey">#63656C</color>
-    <color name="lightGrey">#767984</color>
+    <color name="lightGrey">#EAEBF1</color>
     <color name="backgroundGray">#28292E</color>
 </resources>

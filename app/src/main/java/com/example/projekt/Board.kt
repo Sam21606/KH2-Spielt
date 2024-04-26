@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -31,11 +30,8 @@ class Board : AppCompatActivity(){
     private var ratingIsInitalised = false
 
     private lateinit var buttonSpielbrett: Button
-    private lateinit var infoButton: ImageButton
-    private lateinit var chatButton: ImageButton
-    private lateinit var homeButton: ImageButton
-    private lateinit var textViewPunkte1: TextView
-    private lateinit var textViewPunkte2: TextView
+    private lateinit var textViewPlayer1: TextView
+    private lateinit var textViewPlayer2 : TextView
 
     private lateinit var ratingBewertung: RatingBar
     private lateinit var buttonWeiterBewertung: Button
@@ -87,22 +83,10 @@ class Board : AppCompatActivity(){
         setContentView(R.layout.spielbrett)
         playerCanContinue = false // muss warten bis anderer Spieler bereit ist
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
-        infoButton = findViewById(R.id.infoButton)
-        chatButton = findViewById(R.id.chatButton)
-        homeButton = findViewById(R.id.homeButton)
-        textViewPunkte1 = findViewById(R.id.textViewPunkte1)
-        textViewPunkte2 = findViewById(R.id.textViewPunkte2)
         textViewStufe = findViewById(R.id.textViewStufe)
 
         textViewStufe.text = "Stufe ${DataStore.stage}"
         setPunkteanzeigen()
-
-        chatButton.setOnClickListener {
-            startIntent(Chat::class.java)
-        }
-        infoButton.setOnClickListener {
-            setPunkteanzeigen()
-        }
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
         }
@@ -181,8 +165,16 @@ class Board : AppCompatActivity(){
         startActivity(intent)
     }
     fun setPunkteanzeigen() {
-        textViewPunkte1.text = DataStore.currentPoints1.toString()
-        textViewPunkte2.text = DataStore.currentPoints2.toString()
+        textViewPlayer1.text = getString(
+            R.string.player1_points ,
+            DataStore.playerName1 ,
+            DataStore.currentPoints1.toString()
+        )
+        textViewPlayer2.text = getString(
+            R.string.palyer2_points ,
+            DataStore.playerName1 ,
+            DataStore.currentPoints2.toString()
+        )
     }
 
     private fun setNewActivity() {
@@ -361,6 +353,7 @@ class Board : AppCompatActivity(){
 
             )
             DataStore.updateAnswerInDB()
+            addPoints()
             //Zurück zum Board
             initBoard()
         }else if (questionNumber != 0) {

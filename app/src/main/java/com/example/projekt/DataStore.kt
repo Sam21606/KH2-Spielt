@@ -3,9 +3,9 @@ package com.example.projekt
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
-    var questionCount = 3
+    var questionCount = 2
     lateinit var answer: MutableMap<String, Any>
-    var gameMode: Boolean = true
+    var gameMode: Boolean = true // True = online
     var playerName1: String = ""
     var playerName2: String = ""
     var topic: String = ""
@@ -18,7 +18,6 @@ object DataStore {
 
     var gameID = ""
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
-    var answersInApp = 0
     var gameData: MutableMap<String, Any> = hashMapOf()
 
 
@@ -56,7 +55,6 @@ object DataStore {
                         )
                     )
                 }
-                answersInApp += 1
                 println("DB Funktion logQuestionAnswers beendet")
             }
 

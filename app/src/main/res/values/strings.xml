@@ -16,7 +16,7 @@
     <string name="explain_to_wait">Es sieht so aus als wäre dein Mitspieler noch nicht bereit. Wenn dieser fertig ist, wird automatisch das Thema angezeigt.</string>
     <string name="here_is_card">Hier ist eure Ereignis Karte</string>
     <string name="id_input">ID Hier eingeben</string>
-    <string name="intorduction_text_rating">Nun werden die beiden Lösungen vorgestellt und du kannst eine Punktevergabe von 1–5 Punkten vornehmen. Durch die Chat-Option könnt ihr miteinander chatten und erhaltet so die Möglichkeit, euch über die Lösungen auszutauschen. Es werden nur ganze Sterne vergeben.</string>
+    <string name="intorduction_text_rating">Nachdem ihr nun beide Lösungen gehört habt und könnt ihr eine Punktevergabe von 1–5 Punkten vergeben, beide Spieler werden beginnend mit Spieler 1. Es werden nur ganze Sterne vergeben.</string>
     <string name="name1">Name Spieler 1</string>
     <string name="name2">Name Spieler 2</string>
     <string name="no_answer_from_player">Noch hat dein Mitspieler keine Lösung eingegeben</string>
@@ -46,4 +46,7 @@
     <string name="oper">Oper</string>
     <string name="culture_question">Wo kann man Kultur erleben?</string>
     <string name="culture_places">Wähle die Orte die du am meisten kennst oder magst</string>
+    <string name="stage">Stufe %1$s</string>
+    <string name="player1_points">%1$s hat %2$s</string>
+    <string name="palyer2_points">%1$s hat %2$s Punkte</string>
 </resources>
