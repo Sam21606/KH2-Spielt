@@ -78,6 +78,7 @@ class Board : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBoard()
+        setSnapshotListener()
     }
 
     private fun initBoard() {
@@ -93,7 +94,6 @@ class Board : AppCompatActivity(){
             setNewActivity()
         }
         updatePlayerStatusInDB()
-        setSnapshotListener()
     }
 
     private fun updatePlayerStatusInDB() {
@@ -103,12 +103,14 @@ class Board : AppCompatActivity(){
                 "stage" to DataStore.stage
             )
             DataStore.updateAnswerInDB()
+            player1IsReady = true
         }else{
             DataStore.answer = hashMapOf(
                 "player2IsReady" to true,
                 "stage" to DataStore.stage
             )
             DataStore.updateAnswerInDB()
+            player2IsReady = true
         }
     }
 
@@ -136,9 +138,10 @@ class Board : AppCompatActivity(){
     }
 
     private fun checkWhatNewInput() {
-        if (currentPoints2Before != DataStore.currentPoints2 || currentPoints1Before != DataStore.currentPoints1){
+        if (currentPoints2Before != DataStore.currentPoints2 || currentPoints1Before != DataStore.currentPoints1) {
             setPunkteanzeigen()
-        }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised ){
+        }
+        if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised ){
             thereIsTheStoryInput = true
             setDisplayedText()
         }else if (!DataStore.player1OR2 && storyText1 != "Warte auf Eingabe" && ratingIsInitalised){
@@ -149,7 +152,7 @@ class Board : AppCompatActivity(){
         }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2){
             thereIsTheStoryInput = true
         }
-        if (player1IsReady || player2IsReady){
+        if (player1IsReady == true && player2IsReady == true ){
             playerCanContinue = true
         }
     }
@@ -168,25 +171,41 @@ class Board : AppCompatActivity(){
     }
 
     private fun setNewActivity() {
-
-        if (DataStore.gameMode) {
+        if (playerCanContinue) {
             when (DataStore.stage) {
                 1 -> {
                     setContentView(R.layout.ereignisskarte)
                     initEreignisKarte()
                 }
+
                 2 -> {
                     setContentView(R.layout.quiz_online)
                     initQuiz()
                 }
+
                 3 -> {
                     setContentView(R.layout.stufe4_online)
                 }
-                4->{
+
+                4 -> {
 
                 }
-
             }
+            updatePlayerStatusInDBLogOf()
+
+        }
+    }
+    fun updatePlayerStatusInDBLogOf(){
+        if (DataStore.player1OR2){
+            DataStore.answer = hashMapOf(
+                "player1IsReady" to false,
+            )
+            DataStore.updateAnswerInDB()
+        }else{
+            DataStore.answer = hashMapOf(
+                "player2IsReady" to false,
+            )
+            DataStore.updateAnswerInDB()
         }
     }
 
@@ -341,6 +360,7 @@ class Board : AppCompatActivity(){
         changeToggleButtonStyle()
         //Prüft ob noch eine neue Frage angezeigt werden muss
         if (questionNumber == choosedQuestion) {
+            addPoints()
             //Aktualisiere Punkte in der DB
             DataStore.answer = hashMapOf(
                 "currentPoints1" to DataStore.currentPoints1,
@@ -348,7 +368,6 @@ class Board : AppCompatActivity(){
 
             )
             DataStore.updateAnswerInDB()
-            addPoints()
             //Zurück zum Board
             initBoard()
         }else if (questionNumber != 0) {
