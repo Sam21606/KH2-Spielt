@@ -17,17 +17,6 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-04-26T15:31:10.292919900Z" />
           <multipleDevicesSelectedInDropDown value="true" />
-          <runningDeviceTargetsSelectedWithDialog>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\samus\.android\avd\Pixel_7_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetsSelectedWithDialog>
           <targetsSelectedWithDialog>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
@@ -51,6 +40,9 @@
         </State>
       </entry>
       <entry key="Spielbrett">
+        <State />
+      </entry>
+      <entry key="ThemaErgebnis">
         <State />
       </entry>
       <entry key="VeranstaltungswahlOffline1">

@@ -17,7 +17,7 @@ class Ereignisskarte : AppCompatActivity() {
     private fun init() {
         val buttonWeiterEreigniskarte = findViewById<Button>(R.id.buttonWeiterEreigniskarte)
         buttonWeiterEreigniskarte.setOnClickListener {
-            intent = Intent(this, ratingOffline::class.java)
+            intent = Intent(this, RatingOffline::class.java)
             startActivity(intent)
         }
     }

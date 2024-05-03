@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ratingOffline"
+            android:name=".RatingOffline"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

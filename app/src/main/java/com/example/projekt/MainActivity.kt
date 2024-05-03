@@ -13,8 +13,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var startButton: Button
-    private lateinit var test: String
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,15 +107,4 @@ class MainActivity : AppCompatActivity() {
             counter++
         }
     }
-
-    fun test() {
-        test = "1"
-        val docRef = db.collection("Answer").document("08m79j4cYbfKpgiNhYyE")
-        docRef.get()
-            .addOnSuccessListener { document ->
-                test = document.getString("Text").toString()
-
-            }
-    }
-
 }

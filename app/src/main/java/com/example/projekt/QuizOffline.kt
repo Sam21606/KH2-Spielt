@@ -132,7 +132,7 @@ class QuizOffline : AppCompatActivity() {
         textViewFrageQuiz.text = questionText
     }
 
-    fun setTextEtcToChosenQuestio() {
+    private fun setTextEtcToChosenQuestio() {
         // setzt den text der Buttons zu Fragen und Antwort
 
         //Speichert Fragen und Antworten in einzelnen Variabeln

@@ -38,14 +38,14 @@ class Board : AppCompatActivity(){
     private lateinit var buttonWeiterBewertung: Button
     private lateinit var textViewInputVonMitspieler: TextView
 
-    lateinit var buttonWeiterEreigniskarte : Button
+    private lateinit var buttonWeiterEreigniskarte : Button
 
     private lateinit var weiterButton : Button
     private lateinit var ediTextStoryInput : TextInputEditText
 
 
     private var ediTextInput = ""
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
 
@@ -58,7 +58,7 @@ class Board : AppCompatActivity(){
     private lateinit var buttonAnswer4Online: ToggleButton
     private lateinit var textViewFrageQuiz: TextView
     private var questionNumber = 0
-    private var choosedQuestion = 3//Spieler gewählte Anzahl an Fragen
+    private var choosedQuestion = DataStore.questionsPicked.size
     private var questionID: String = ""
     private var clickedAnswerID = "0"
     private lateinit var questionText: String
@@ -126,10 +126,6 @@ class Board : AppCompatActivity(){
                 storyText2 = snapshot.get("storyText2").toString()
                 player1IsReady = snapshot.getBoolean("player1IsReady")!!
                 player2IsReady = snapshot.getBoolean("player2IsReady")!!
-                DataStore.questionsPicked = (snapshot.get("questionsPicked") as? MutableList<Int>)!!
-
-
-
                 checkWhatNewInput()
             }
     }
@@ -158,15 +154,15 @@ class Board : AppCompatActivity(){
         }
     }
 
-    fun setPunkteanzeigen() {
+    private fun setPunkteanzeigen() {
         textViewPlayer1.text = getString(
-            R.string.player1_points ,
-            DataStore.playerName1 ,
+            R.string.player_points,
+            DataStore.playerName1,
             DataStore.currentPoints1.toString()
         )
         textViewPlayer2.text = getString(
-            R.string.palyer2_points ,
-            DataStore.playerName1 ,
+            R.string.player_points,
+            DataStore.playerName2,
             DataStore.currentPoints2.toString()
         )
     }
@@ -197,7 +193,7 @@ class Board : AppCompatActivity(){
 
     // ErignisKarte
     private fun initEreignisKarte() {
-        buttonWeiterEreigniskarte = findViewById<Button>(R.id.buttonWeiterEreigniskarte)
+        buttonWeiterEreigniskarte = findViewById(R.id.buttonWeiterEreigniskarte)
         buttonWeiterEreigniskarte.setOnClickListener {
             initZweiteEtappe()
         }
@@ -358,11 +354,15 @@ class Board : AppCompatActivity(){
         }else if (questionNumber != 0) {
             // Löst neuen Fragevorgang aus
             addPoints()
-            selectQuestion()
+            setNewQuestion()
+            setTextEtcToChosenQuestio()
+            questionNumber += 1
             toggleButtonClicked = 0
         }else{
             // Löst ersten Fragevorgang aus
-            selectQuestion()
+            setNewQuestion()
+            setTextEtcToChosenQuestio()
+            questionNumber += 1
         }
 
     }
@@ -378,16 +378,7 @@ class Board : AppCompatActivity(){
         }
     }
 
-    fun selectQuestion() {
-        // remove current question from DS
-        setNewRandomQuestion()
-        setTextEtcToChosenQuestio()
-        questionNumber += 1
-    }
-
-
-
-    fun setNewRandomQuestion() {
+    private fun setNewQuestion() {
         // Wählt über eine Zuffalszahl eine Frage aus
         questionID = DataStore.questions[DataStore.questionsPicked[questionNumber]].ID
         questionText = DataStore.questions[DataStore.questionsPicked[questionNumber]].text
@@ -395,7 +386,7 @@ class Board : AppCompatActivity(){
         // lässt diese Prüfen
     }
 
-    fun setTextEtcToChosenQuestio() {
+    private fun setTextEtcToChosenQuestio() {
         // setzt den text der Buttons zu Fragen und Antwort
 
         //Speichert Fragen und Antworten in einzelnen Variabeln

@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ThemaErgebnis : AppCompatActivity() {
 
-    lateinit var buttonThema: Button
-    lateinit var textThemaErgebnis: TextView
+    private lateinit var buttonThema: Button
+    private lateinit var textThemaErgebnis: TextView
+    private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +22,19 @@ class ThemaErgebnis : AppCompatActivity() {
 
     private fun init() {
         DataStore.logQuestionAnswers()
-        println("Ich wurde ausgeführt crash?")
         buttonThema = findViewById(R.id.buttonThema)
         textThemaErgebnis = findViewById(R.id.TextThemaErgebnis)
         textThemaErgebnis.text = getString(R.string.topic_text, DataStore.topic)
         buttonThema.setOnClickListener {
         if (DataStore.gameMode) {
-            val intent = Intent(this, Board::class.java)
-            startActivity(intent)
+            db.collection("Games").document(DataStore.gameID)
+                .get()
+                .addOnSuccessListener {result ->
+                    DataStore.playerName2 = result.get("playerName2").toString()
+                    DataStore.playerName1 = result.get("playerName1").toString()
+                    val intent = Intent(this, Board::class.java)
+                    startActivity(intent)
+                }
         }else{
             val intent = Intent(this, Spielbrett::class.java)
             startActivity(intent)

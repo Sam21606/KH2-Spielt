@@ -10,9 +10,12 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+
 
 class PlayerConfig : AppCompatActivity() {
 
@@ -21,6 +24,8 @@ class PlayerConfig : AppCompatActivity() {
     private lateinit var textName2: EditText
     private lateinit var gameStartButton: Button
     private lateinit var gespeicherteSpiele: ImageButton
+    private lateinit var seekBar : SeekBar
+    private lateinit var textViewQuestionCount : TextView
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
 
@@ -36,8 +41,12 @@ class PlayerConfig : AppCompatActivity() {
         textName2 = findViewById(R.id.textName2)
         gameStartButton = findViewById(R.id.gameStartButton)
         gespeicherteSpiele = findViewById(R.id.gespeicherteSpiele)
+        seekBar = findViewById(R.id.seekBar)
+        textViewQuestionCount = findViewById(R.id.textViewQuestionCount)
+        var questionCount = seekBar.progress +1
+        textViewQuestionCount.text = getString(R.string.fragen_ausgewahlt , questionCount.toString())
         chosenPopout = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained))
-        toggleButton.setOnClickListener() {
+        toggleButton.setOnClickListener {
             onlineOfflinechanger()
         }
         gameStartButton.setOnClickListener {
@@ -45,14 +54,28 @@ class PlayerConfig : AppCompatActivity() {
         }
         gespeicherteSpiele.setOnClickListener {
             DataStore.reconnect = true
-            val intent = Intent(this, OnlineConnection::class.java)
+            val intent = Intent(this , OnlineConnection::class.java)
             startActivity(intent)
         }
+        seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar , progress: Int , fromUser: Boolean) {
+                questionCount = seekBar.progress +1
+                textViewQuestionCount.text =
+                    getString(R.string.fragen_ausgewahlt , questionCount.toString())
+            }
+        })
     }
 
     private fun goToVeranstaltungswahl() {
         DataStore.playerName1 = textName1.text.toString()
         DataStore.playerName2 = textName2.text.toString()
+        DataStore.questionCount = seekBar.progress +1
         onlineOfflinechanger()
         if (DataStore.gameMode && DataStore.playerName1 != "") {
             DataStore.logQuestionAnswers()
@@ -86,7 +109,7 @@ class PlayerConfig : AppCompatActivity() {
     }
 
 
-    fun onlineOfflinechanger() {
+    private fun onlineOfflinechanger() {
         if (toggleButton.text.toString() == "Offline") {
             DataStore.gameMode = false
             textName2.visibility = View.VISIBLE

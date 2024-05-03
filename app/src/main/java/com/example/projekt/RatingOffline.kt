@@ -11,7 +11,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class ratingOffline : AppCompatActivity() { // KLassennamen camel case
+class RatingOffline : AppCompatActivity() { // KLassennamen camel case
 
     private lateinit var ratingBewertung: RatingBar
     private lateinit var buttonWeiterBewertung: Button

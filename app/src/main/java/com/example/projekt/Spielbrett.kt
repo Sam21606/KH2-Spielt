@@ -61,12 +61,12 @@ class Spielbrett : AppCompatActivity() {
 
     private fun setPunkteanzeigen() {
         textViewPlayer1.text = getString(
-            R.string.player1_points ,
+            R.string.player_points ,
             DataStore.playerName1 ,
             DataStore.currentPoints1.toString()
         )
         textViewPlayer2.text = getString(
-            R.string.palyer2_points ,
+            R.string.player_points ,
             DataStore.playerName2 ,
             DataStore.currentPoints2.toString()
         )

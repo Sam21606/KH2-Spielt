@@ -7,8 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
 class WartenAufMitspieler : AppCompatActivity() {
-    var db = FirebaseFirestore.getInstance()
-    lateinit var listenerRegistration: ListenerRegistration
+    private var db = FirebaseFirestore.getInstance()
+    private lateinit var listenerRegistration: ListenerRegistration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +21,7 @@ class WartenAufMitspieler : AppCompatActivity() {
         listenerRegistration = db.collection("Games").document(DataStore.gameID)
             .addSnapshotListener{snapshot, _ ->
                 DataStore.topic = snapshot?.get("topic").toString()
+                DataStore.questionsPicked = (snapshot?.get("questionsPicked") as? MutableList<Int>)!!
                 println("Im still on")
                 if (DataStore.topic == "Theater" || DataStore.topic == "Oper" || DataStore.topic == "Lesung" || DataStore.topic == "Performance" || DataStore.topic == "Ausstellung" || DataStore.topic == "Konzert") {
                     listenerRegistration.remove()

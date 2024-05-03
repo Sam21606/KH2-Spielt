@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 class OnlineConnection : AppCompatActivity() {
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
     private lateinit var buttonConnectGame: Button
     private lateinit var buttonCreateGame: Button
     private lateinit var editTextIDInput: EditText
@@ -28,7 +28,7 @@ class OnlineConnection : AppCompatActivity() {
     private var buttonRejoinGameClicked = 0
     private lateinit var clipboardManager: ClipboardManager
     private lateinit var continueGame : Button
-    private lateinit var ToggleButtonPlayerNumberInput : ToggleButton
+    private lateinit var toggleButtonPlayerNumberInput : ToggleButton
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class OnlineConnection : AppCompatActivity() {
         buttonConnectGame = findViewById(R.id.buttonConnectGame)
         editTextIDInput = findViewById(R.id.editTextIDInput)
         continueGame = findViewById(R.id.continueGame)
-        ToggleButtonPlayerNumberInput = findViewById(R.id.ToggleButtonPlayerNumberInput)
+        toggleButtonPlayerNumberInput = findViewById(R.id.ToggleButtonPlayerNumberInput)
         buttonCreateGame.setOnClickListener {
             DataStore.player1OR2 = true// Spieler true wenn er das Game erstellt
             makeGame()
@@ -55,6 +55,7 @@ class OnlineConnection : AppCompatActivity() {
                 startActivity(intent)
             }else if (buttonConnectGameClicked == 0){
                 DataStore.playerName2 = DataStore.playerName1
+                DataStore.playerName1 = ""
                 buttonConnectGame.text = getString(R.string.checkID)
                 buttonCreateGame.visibility = View.INVISIBLE
                 editTextIDInput.visibility = View.VISIBLE
@@ -74,7 +75,7 @@ class OnlineConnection : AppCompatActivity() {
             buttonCreateGame.visibility = View.INVISIBLE
             editTextIDInput.visibility = View.VISIBLE
             buttonConnectGame.visibility = View.INVISIBLE
-            ToggleButtonPlayerNumberInput.visibility = View.VISIBLE
+            toggleButtonPlayerNumberInput.visibility = View.VISIBLE
             buttonRejoinGameClicked += 1
             continueGame.text = getString(R.string.checkID)
         }else{
@@ -84,9 +85,17 @@ class OnlineConnection : AppCompatActivity() {
 
     private fun makeGame() {
         if (buttonCreateGameClicked == 0) {
-            DataStore.answer = hashMapOf(
+            DataStore.gameData = hashMapOf(
                 "playerName1" to DataStore.playerName1,
-                "stage" to DataStore.stage
+                "stage" to DataStore.stage,
+                "questionCount" to DataStore.questionCount,
+                "player1IsReady" to false,
+                "player2IsReady" to false,
+                "currentPoints1" to 0,
+                "currentPoints2" to 0,
+                "storyText1" to "Warte auf Eingabe",
+                "storyText2" to "Warte auf Eingabe",
+                "questionsPicked" to DataStore.questionsPicked
             )
             DataStore.createGame()
             buttonCreateGame.text = getString(R.string.copyID)
@@ -118,12 +127,6 @@ class OnlineConnection : AppCompatActivity() {
                         DataStore.gameID = editTextIDInput.text.toString()
                         DataStore.answer = hashMapOf(
                             "playerName2" to DataStore.playerName2,
-                            "player1IsReady" to false,
-                            "player2IsReady" to false,
-                            "currentPoints1" to 0,
-                            "currentPoints2" to 0,
-                            "storyText1" to "Warte auf Eingabe",
-                            "storyText2" to "Warte auf Eingabe"
                         )
                         DataStore.updateAnswerInDB()
                         val intent = Intent(this, Veranstaltungswahl::class.java)
@@ -146,7 +149,7 @@ class OnlineConnection : AppCompatActivity() {
     }
 
     private fun checkIfGameExists() {
-        DataStore.player1OR2 = ToggleButtonPlayerNumberInput.text.toString() == "Player 1"
+        DataStore.player1OR2 = toggleButtonPlayerNumberInput.text.toString() == "Player 1" //wenn Player 1 = true
         if (editTextIDInput.text.length == 20) {
             db.collection("Games").document(editTextIDInput.text.toString())
                 .get()
@@ -160,13 +163,13 @@ class OnlineConnection : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     if (result != null) {
                         DataStore.gameID = editTextIDInput.text.toString()
-                        DataStore.currentPoints1 = result?.getLong("currentPoints1")!!.toInt()
+                        DataStore.currentPoints1 = result.getLong("currentPoints1")!!.toInt()
                         DataStore.currentPoints2 = result.getLong("currentPoints2")!!.toInt()
                         DataStore.playerName1 = result.getString("playerName1").toString()
                         DataStore.playerName2 = result.getString("playerName2").toString()
-                        DataStore.questionsPicked =
-                            (result.get("questionsPicked") as? MutableList<Int>)!!
-                        DataStore.stage = result?.getLong("stage")!!.toInt()
+                        DataStore.questionCount = result.getLong("questionCount")!!.toInt()
+                        DataStore.questionsPicked = (result.get("questionsPicked") as? MutableList<Int>)!!
+                        DataStore.stage = result.getLong("stage")!!.toInt()
                         val intent = Intent(this , Board::class.java)
                         startActivity(intent)
                     }else{
@@ -186,7 +189,7 @@ class OnlineConnection : AppCompatActivity() {
         }
     }
 
-    fun popout(){
+    private fun popout(){
         val popout = Dialog(this)
         val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)

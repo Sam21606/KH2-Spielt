@@ -37,7 +37,7 @@ class Veranstaltungswahl : AppCompatActivity() {
     private lateinit var checkOper: CheckBox
     private lateinit var checkAusstellung: CheckBox
     private lateinit var textViewPlayerName: TextView
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,7 +135,7 @@ class Veranstaltungswahl : AppCompatActivity() {
     }
 
 
-    fun checkboxCheck() {
+    private fun checkboxCheck() {
         if (DataStore.player1OR2) {
             ausstellung1 = checkAusstellung.isChecked
             lesung1 = checkLesung.isChecked
@@ -201,7 +201,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         }
     }
 
-    fun checkWhatTopicMatches() {
+    private fun checkWhatTopicMatches() {
         if (theater1 && theater2) {
             themaSet.add("Theater")
         }
@@ -226,7 +226,7 @@ class Veranstaltungswahl : AppCompatActivity() {
             updateTopicInDS()
         }
     }
-    fun ifNoMatchChooseRandom() {
+    private fun ifNoMatchChooseRandom() {
         if (themaSet.size == 0) {
             if (theater1 || theater2) {
                 themaSet.add("Theater")

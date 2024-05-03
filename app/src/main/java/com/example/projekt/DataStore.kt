@@ -1,5 +1,6 @@
 package com.example.projekt
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
@@ -16,13 +17,13 @@ object DataStore {
     val questions = mutableListOf<Question>()
     val answers = mutableListOf<Answer>()
 
-    var gameID = ""
+    var gameID = "Q1q5oJnxhwoIBmqxp6y2"
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
     var gameData: MutableMap<String, Any> = hashMapOf()
     var reconnect = false
 
 
-    var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
 
     fun logQuestionAnswers() {
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
@@ -63,18 +64,15 @@ object DataStore {
             .add(gameData)
             .addOnSuccessListener { documentReference ->
                 gameID = documentReference.id
-                updateAnswerInDB()
             }
     }
 
     fun updateAnswerInDB(){
-        println("DB Funktion updateAnswer started")
         db.collection("Games").document(gameID)
             .update(answer)
             .addOnFailureListener {
-                println("DB Funktion updateAnswer FAILLL")
+                Log.e("Database", "Failed to update the database.")
             }
-        println("DB Funktion updateAnswer ended")
     }
 }
 
