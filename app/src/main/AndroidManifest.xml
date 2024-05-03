@@ -30,14 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".SettingsActivity"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-        </intent-filter>
-    </activity>
-        <activity
             android:name=".Veranstaltungswahl"
             android:exported="true">
             <intent-filter>
