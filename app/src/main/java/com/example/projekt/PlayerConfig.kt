@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -26,7 +27,11 @@ class PlayerConfig : AppCompatActivity() {
     private lateinit var gespeicherteSpiele: ImageButton
     private lateinit var seekBar : SeekBar
     private lateinit var textViewQuestionCount : TextView
+    private lateinit var nextAvatarR: ImageButton
+    private lateinit var nextAvatarL: ImageButton
+    private lateinit var avatarImage:ImageView
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
+    private var currentImage = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +48,11 @@ class PlayerConfig : AppCompatActivity() {
         gespeicherteSpiele = findViewById(R.id.gespeicherteSpiele)
         seekBar = findViewById(R.id.seekBar)
         textViewQuestionCount = findViewById(R.id.textViewQuestionCount)
+        nextAvatarR = findViewById(R.id.nächsterAvatarR)
+        nextAvatarL = findViewById(R.id.nächsterAvatarL)
+        avatarImage = findViewById(R.id.avatarImage)
         var questionCount = seekBar.progress +1
+
         textViewQuestionCount.text = getString(R.string.fragen_ausgewahlt , questionCount.toString())
         chosenPopout = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained))
         toggleButton.setOnClickListener {
@@ -70,6 +79,19 @@ class PlayerConfig : AppCompatActivity() {
                     getString(R.string.fragen_ausgewahlt , questionCount.toString())
             }
         })
+        nextAvatarL.setOnClickListener{
+            currentImage = if (currentImage == 0) DataStore.images.size - 1 else currentImage - 1
+            avatarImage.setImageResource(DataStore.images[currentImage])
+        }
+
+        nextAvatarR.setOnClickListener{
+            currentImage++
+            if (currentImage >= DataStore.images.size) {
+                currentImage = 0
+            }
+            avatarImage.setImageResource(DataStore.images[currentImage])
+        }
+        avatarImage.setImageResource(DataStore.images[currentImage])
     }
 
     private fun goToVeranstaltungswahl() {
@@ -79,6 +101,7 @@ class PlayerConfig : AppCompatActivity() {
         onlineOfflinechanger()
         if (DataStore.gameMode && DataStore.playerName1 != "") {
             DataStore.logQuestionAnswers()
+            DataStore.choosenAvatar1 = currentImage
             val intent = Intent(this, OnlineConnection::class.java)
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {

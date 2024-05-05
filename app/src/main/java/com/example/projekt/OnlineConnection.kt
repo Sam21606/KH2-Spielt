@@ -95,7 +95,8 @@ class OnlineConnection : AppCompatActivity() {
                 "currentPoints2" to 0,
                 "storyText1" to "Warte auf Eingabe",
                 "storyText2" to "Warte auf Eingabe",
-                "questionsPicked" to DataStore.questionsPicked
+                "questionsPicked" to DataStore.questionsPicked,
+                "choosenAvatar1" to DataStore.choosenAvatar1
             )
             DataStore.createGame()
             buttonCreateGame.text = getString(R.string.copyID)
@@ -127,6 +128,7 @@ class OnlineConnection : AppCompatActivity() {
                         DataStore.gameID = editTextIDInput.text.toString()
                         DataStore.answer = hashMapOf(
                             "playerName2" to DataStore.playerName2,
+                            "choosenAvatar2" to DataStore.choosenAvatar1
                         )
                         DataStore.updateAnswerInDB()
                         val intent = Intent(this, Veranstaltungswahl::class.java)

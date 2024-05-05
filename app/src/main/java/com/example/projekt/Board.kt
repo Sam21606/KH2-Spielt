@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -47,6 +48,8 @@ class Board : AppCompatActivity(){
     private var ediTextInput = ""
     private var db = FirebaseFirestore.getInstance()
     private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
+    private lateinit var imagePlayer1 : ImageView
+    private lateinit var imagePlayer2 : ImageView
 
 
 
@@ -88,6 +91,10 @@ class Board : AppCompatActivity(){
         textViewStufe = findViewById(R.id.textViewBoard)
         textViewPlayer1 = findViewById(R.id.textViewPlayer1)
         textViewPlayer2 = findViewById(R.id.textViewPlayer2)
+        imagePlayer1 = findViewById(R.id.imagePlayer1)
+        imagePlayer2 = findViewById(R.id.imagePlayer2)
+        imagePlayer1.setImageResource(DataStore.images[DataStore.choosenAvatar1])
+        imagePlayer2.setImageResource(DataStore.images[DataStore.choosenAvatar2])
         textViewStufe.text = getString(R.string.Stage_text , DataStore.stage.toString())
         setPunkteanzeigen()
         buttonSpielbrett.setOnClickListener {
@@ -152,7 +159,7 @@ class Board : AppCompatActivity(){
         }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2){
             thereIsTheStoryInput = true
         }
-        if (player1IsReady == true && player2IsReady == true ){
+        if (player1IsReady && player2IsReady){
             playerCanContinue = true
         }
     }
@@ -195,14 +202,16 @@ class Board : AppCompatActivity(){
 
         }
     }
-    fun updatePlayerStatusInDBLogOf(){
-        if (DataStore.player1OR2){
+    private fun updatePlayerStatusInDBLogOf(){
+        if (DataStore.player1OR2 && player1IsReady){
             DataStore.answer = hashMapOf(
                 "player1IsReady" to false,
+                "player2IsReady" to false,
             )
             DataStore.updateAnswerInDB()
-        }else{
+        }else if (!DataStore.player1OR2 && player2IsReady){
             DataStore.answer = hashMapOf(
+                "player1IsReady" to false,
                 "player2IsReady" to false,
             )
             DataStore.updateAnswerInDB()

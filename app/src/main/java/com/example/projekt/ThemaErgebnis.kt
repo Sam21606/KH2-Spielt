@@ -32,6 +32,8 @@ class ThemaErgebnis : AppCompatActivity() {
                 .addOnSuccessListener {result ->
                     DataStore.playerName2 = result.get("playerName2").toString()
                     DataStore.playerName1 = result.get("playerName1").toString()
+                    DataStore.choosenAvatar1 = result.getLong("choosenAvatar1")?.toInt()!!
+                    DataStore.choosenAvatar2 = result.getLong("choosenAvatar2")?.toInt()!!
                     val intent = Intent(this, Board::class.java)
                     startActivity(intent)
                 }

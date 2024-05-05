@@ -21,6 +21,10 @@ object DataStore {
     var player1OR2 = true // true = 1 = Spieler der das Spiel erstellt
     var gameData: MutableMap<String, Any> = hashMapOf()
     var reconnect = false
+    var choosenAvatar1 = 1
+    var choosenAvatar2 = 1
+    val images = listOf(R.drawable.person_blue_no_background, R.drawable.person_green_no_background, R.drawable.person_red_no_background, R.drawable.person_turkis_no_background, R.drawable.person_yellow_no_background)
+
 
 
     private var db = FirebaseFirestore.getInstance()
