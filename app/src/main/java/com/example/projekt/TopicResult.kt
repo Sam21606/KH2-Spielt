@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ThemaErgebnis : AppCompatActivity() {
+class TopicResult : AppCompatActivity() {
 
     private lateinit var buttonThema: Button
     private lateinit var textThemaErgebnis: TextView
@@ -15,7 +15,7 @@ class ThemaErgebnis : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.thema_ergebnis)
+        setContentView(R.layout.topic_result)
 
         init()
     }
@@ -38,7 +38,7 @@ class ThemaErgebnis : AppCompatActivity() {
                     startActivity(intent)
                 }
         }else{
-            val intent = Intent(this, Spielbrett::class.java)
+            val intent = Intent(this, BoardOffline::class.java)
             startActivity(intent)
         }
         }

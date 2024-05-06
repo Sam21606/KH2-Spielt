@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
-class WartenAufMitspieler : AppCompatActivity() {
+class WaitForPlayer : AppCompatActivity() {
     private var db = FirebaseFirestore.getInstance()
     private lateinit var listenerRegistration: ListenerRegistration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.warten_auf_mitspieler)
+        setContentView(R.layout.wait_for_player)
 
         init()
     }
@@ -22,7 +22,6 @@ class WartenAufMitspieler : AppCompatActivity() {
             .addSnapshotListener{snapshot, _ ->
                 DataStore.topic = snapshot?.get("topic").toString()
                 DataStore.questionsPicked = (snapshot?.get("questionsPicked") as? MutableList<Int>)!!
-                println("Im still on")
                 if (DataStore.topic == "Theater" || DataStore.topic == "Oper" || DataStore.topic == "Lesung" || DataStore.topic == "Performance" || DataStore.topic == "Ausstellung" || DataStore.topic == "Konzert") {
                     listenerRegistration.remove()
                     getInput()
@@ -31,7 +30,7 @@ class WartenAufMitspieler : AppCompatActivity() {
     }
 
     private fun getInput() {
-        val intent = Intent(this, ThemaErgebnis::class.java)
+        val intent = Intent(this, TopicResult::class.java)
         startActivity(intent)
     }
 

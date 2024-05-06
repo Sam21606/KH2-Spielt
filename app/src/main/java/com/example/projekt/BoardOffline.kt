@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class Spielbrett : AppCompatActivity() {
+class BoardOffline : AppCompatActivity() {
 
     private lateinit var textViewBoard: TextView
     private lateinit var buttonSpielbrett: Button
@@ -45,13 +45,13 @@ class Spielbrett : AppCompatActivity() {
 
         when (DataStore.stage) {
             1 -> {
-                startIntent(Ereignisskarte::class.java)
+                startIntent(EventCard::class.java)
             }
             2 -> {
                 startIntent(QuizOffline::class.java)
             }
             3 -> {
-                startIntent(Stufe4Offline::class.java)
+                startIntent(CultureExperience::class.java)
             }
             4 -> {
                 println("${DataStore.stage}")

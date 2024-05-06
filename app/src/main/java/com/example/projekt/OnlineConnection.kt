@@ -27,7 +27,7 @@ class OnlineConnection : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.online_verbindung)
+        setContentView(R.layout.online_connection)
 
         init()
     }
@@ -45,7 +45,7 @@ class OnlineConnection : AppCompatActivity() {
         }
         buttonConnectGame.setOnClickListener {
             if (buttonConnectGameClicked == 0 && buttonCreateGameClicked == 1){
-                val intent = Intent(this, Veranstaltungswahl::class.java)
+                val intent = Intent(this, ChooseTopic::class.java)
                 startActivity(intent)
             }else if (buttonConnectGameClicked == 0){
                 DataStore.playerName2 = DataStore.playerName1
@@ -89,6 +89,8 @@ class OnlineConnection : AppCompatActivity() {
                 "currentPoints2" to 0,
                 "storyText1" to "Warte auf Eingabe",
                 "storyText2" to "Warte auf Eingabe",
+                "cultureText1" to "Warte auf Eingabe",
+                "cultureText2" to "Warte auf Eingabe",
                 "questionsPicked" to DataStore.questionsPicked,
                 "choosenAvatar1" to DataStore.choosenAvatar1
             )
@@ -125,7 +127,7 @@ class OnlineConnection : AppCompatActivity() {
                             "choosenAvatar2" to DataStore.choosenAvatar1
                         )
                         DataStore.updateAnswerInDB()
-                        val intent = Intent(this, Veranstaltungswahl::class.java)
+                        val intent = Intent(this, ChooseTopic::class.java)
                         startActivity(intent)
                     }else{
                         DataStore.chosenPopout = mutableListOf(

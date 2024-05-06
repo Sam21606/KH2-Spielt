@@ -17,7 +17,7 @@ class RatingOffline : AppCompatActivity() { // KLassennamen camel case
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bewertung_offline)
+        setContentView(R.layout.rating_offline)
 
         init()
     }
@@ -35,7 +35,7 @@ class RatingOffline : AppCompatActivity() { // KLassennamen camel case
     }
 
     private fun startIntent() {
-        val intent = Intent(this, Spielbrett::class.java)
+        val intent = Intent(this, BoardOffline::class.java)
         startActivity(intent)
     }
 

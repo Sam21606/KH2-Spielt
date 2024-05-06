@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.properties.Delegates
 
-class Veranstaltungswahl : AppCompatActivity() {
+class ChooseTopic : AppCompatActivity() {
     private var random by Delegates.notNull<Int>()
     private var theater1 = false
     private var oper1 = false
@@ -37,7 +37,7 @@ class Veranstaltungswahl : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.veranstaltungswahl)
+        setContentView(R.layout.choose_topic)
 
         init()
     }
@@ -154,7 +154,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         if (DataStore.player1OR2) {
             if (!theater2 && !oper2 && !ausstellung2 && !lesung2 && !konzert2 && !performance2) {
                 giveTopicToFirebase()
-                val intent = Intent(this, WartenAufMitspieler::class.java)
+                val intent = Intent(this, WaitForPlayer::class.java)
                 startActivity(intent)
             } else {
                 checkWhatTopicMatches()
@@ -162,7 +162,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         } else {
             if (!theater1 && !oper1 && !ausstellung1 && !lesung1 && !konzert1 && !performance1) {
                 giveTopicToFirebase()
-                val intent = Intent(this, WartenAufMitspieler::class.java)
+                val intent = Intent(this, WaitForPlayer::class.java)
                 startActivity(intent)
             } else {
                 checkWhatTopicMatches()
@@ -259,7 +259,7 @@ class Veranstaltungswahl : AppCompatActivity() {
             )
             DataStore.updateAnswerInDB()
         }
-        val intent = Intent(this, ThemaErgebnis::class.java)
+        val intent = Intent(this, TopicResult::class.java)
         startActivity(intent)
     }
 

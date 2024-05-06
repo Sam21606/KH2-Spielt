@@ -40,7 +40,7 @@ class QuizOffline : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.quiz_online)
+        setContentView(R.layout.quiz)
         init()
     }
 
@@ -84,7 +84,7 @@ class QuizOffline : AppCompatActivity() {
         if (questionNumber == DataStore.questionCount * 2) {
             addPoints()
             DataStore.player1OR2 = true
-            startActivity(Intent(this, Spielbrett::class.java))
+            startActivity(Intent(this, BoardOffline::class.java))
         } else if (questionNumber != 0) {
             addPoints()
             selectQuestion()

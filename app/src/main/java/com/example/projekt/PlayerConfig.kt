@@ -101,7 +101,7 @@ class PlayerConfig : AppCompatActivity() {
             startActivity(intent)
         } else if (!DataStore.gameMode && (DataStore.playerName1 != "") && (DataStore.playerName2 != "")) {
             DataStore.logQuestionAnswers()
-            val intent2 = Intent(this, Veranstaltungswahl::class.java)
+            val intent2 = Intent(this, ChooseTopic::class.java)
             startActivity(intent2)
         } else {
             DataStore.popout(this)

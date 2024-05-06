@@ -6,48 +6,53 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/textView100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/culture"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.043" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/textView110"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:text="@string/culture_introduction"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/textView100"
+        app:layout_constraintVertical_bias="0.052" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="294dp"
-        android:layout_height="231dp"
-        android:layout_marginTop="64dp"
+        android:id="@+id/imageView40"
+        android:layout_width="187dp"
+        android:layout_height="333dp"
+        android:background="@drawable/culture_card"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:srcCompat="@android:drawable/ic_menu_compass" />
+        app:layout_constraintTop_toBottomOf="@+id/textView110"
+        app:layout_constraintVertical_bias="0.207" />
 
     <Button
         android:backgroundTint="@color/grey"
         android:textColor="@color/lightGrey"
-        android:id="@+id/buttonStufe4Online"
+        android:id="@+id/cultureContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/continue_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView40" />
 </androidx.constraintlayout.widget.ConstraintLayout>

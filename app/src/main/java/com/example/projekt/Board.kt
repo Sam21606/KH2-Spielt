@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class Board : AppCompatActivity(){
     // Variables related to the board
-    private lateinit var textViewStufe: TextView
+    private lateinit var textViewStage: TextView
     private lateinit var textViewPlayer1: TextView
     private lateinit var textViewPlayer2: TextView
     private lateinit var imagePlayer1: ImageView
@@ -31,14 +31,14 @@ class Board : AppCompatActivity(){
     private var currentPoints2Before = 0
     private var thereIsTheStoryInput = false
     private var ratingIsInitalised = false
-    private lateinit var ediTextStoryInput: TextInputEditText
     private var ediTextInput = ""
 
-    // Variables related to Ereigniskarte
+    // Variables related to Event Card
     private lateinit var buttonWeiterEreigniskarte: Button
 
-    // Variables related to ZweiteEtappe
+    // Variables related to Answer Input
     private lateinit var weiterButton: Button
+    private lateinit var ediTextStoryInput: TextInputEditText
 
     // Variables related to rating
     private lateinit var ratingBewertung: RatingBar
@@ -75,6 +75,11 @@ class Board : AppCompatActivity(){
         4 to R.color.grey
     )
 
+    // Culture Experinece
+    private lateinit var cultureContinue: Button
+    var cultureText1 = ""
+    var cultureText2 = ""
+
     // Firebase
     private var db = FirebaseFirestore.getInstance()
 
@@ -89,15 +94,15 @@ class Board : AppCompatActivity(){
         setContentView(R.layout.board)
         playerCanContinue = false // muss warten bis anderer Spieler bereit ist
         buttonSpielbrett = findViewById(R.id.buttonSpielbrett)
-        textViewStufe = findViewById(R.id.textViewBoard)
+        textViewStage = findViewById(R.id.textViewBoard)
         textViewPlayer1 = findViewById(R.id.textViewPlayer1)
         textViewPlayer2 = findViewById(R.id.textViewPlayer2)
         imagePlayer1 = findViewById(R.id.imagePlayer1)
         imagePlayer2 = findViewById(R.id.imagePlayer2)
         imagePlayer1.setImageResource(DataStore.images[DataStore.choosenAvatar1])
         imagePlayer2.setImageResource(DataStore.images[DataStore.choosenAvatar2])
-        textViewStufe.text = getString(R.string.Stage_text , DataStore.stage.toString())
-        setPunkteanzeigen()
+        textViewStage.text = getString(R.string.Stage_text , DataStore.stage.toString())
+        setPointsViews()
         buttonSpielbrett.setOnClickListener {
             setNewActivity()
         }
@@ -134,6 +139,8 @@ class Board : AppCompatActivity(){
                 DataStore.currentPoints2 = snapshot.getLong("currentPoints2")!!.toInt()
                 storyText1 = snapshot.get("storyText1").toString()
                 storyText2 = snapshot.get("storyText2").toString()
+                cultureText1 = snapshot.get("cultureText1").toString()
+                cultureText2 = snapshot.get("cultureText2").toString()
                 player1IsReady = snapshot.getBoolean("player1IsReady")!!
                 player2IsReady = snapshot.getBoolean("player2IsReady")!!
                 checkWhatNewInput()
@@ -147,17 +154,28 @@ class Board : AppCompatActivity(){
 
     private fun checkWhatNewInput() {
         if (currentPoints2Before != DataStore.currentPoints2 || currentPoints1Before != DataStore.currentPoints1) {
-            setPunkteanzeigen()
+            setPointsViews()
         }
-        if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised ){
+        if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised && DataStore.stage == 1){
             thereIsTheStoryInput = true
             setDisplayedText()
-        }else if (!DataStore.player1OR2 && storyText1 != "Warte auf Eingabe" && ratingIsInitalised){
+        }else if (!DataStore.player1OR2 && storyText1 != "Warte auf Eingabe" && ratingIsInitalised&& DataStore.stage == 1){
             thereIsTheStoryInput = true
             setDisplayedText()
-        }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2){
+        }else if (storyText2 != "Warte auf Eingabe" && DataStore.player1OR2&& DataStore.stage == 1){
             thereIsTheStoryInput = true
-        }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2){
+        }else if (storyText1 != "Warte auf Eingabe" && !DataStore.player1OR2&& DataStore.stage == 1){
+            thereIsTheStoryInput = true
+        }
+        if (cultureText2 != "Warte auf Eingabe" && DataStore.player1OR2 && ratingIsInitalised&& DataStore.stage == 3 ){
+            thereIsTheStoryInput = true
+            setDisplayedText()
+        }else if (!DataStore.player1OR2 && cultureText1 != "Warte auf Eingabe" && ratingIsInitalised&& DataStore.stage == 3){
+            thereIsTheStoryInput = true
+            setDisplayedText()
+        }else if (cultureText2 != "Warte auf Eingabe" && DataStore.player1OR2&& DataStore.stage == 3){
+            thereIsTheStoryInput = true
+        }else if (cultureText2 != "Warte auf Eingabe" && !DataStore.player1OR2&& DataStore.stage == 3){
             thereIsTheStoryInput = true
         }
         if (player1IsReady && player2IsReady){
@@ -165,7 +183,7 @@ class Board : AppCompatActivity(){
         }
     }
 
-    private fun setPunkteanzeigen() {
+    private fun setPointsViews() {
         textViewPlayer1.text = getString(
             R.string.player_points,
             DataStore.playerName1,
@@ -183,26 +201,30 @@ class Board : AppCompatActivity(){
             when (DataStore.stage) {
                 1 -> {
                     setContentView(R.layout.ereignisskarte)
-                    initEreignisKarte()
+                    initEventCard()
                 }
 
                 2 -> {
-                    setContentView(R.layout.quiz_online)
+                    setContentView(R.layout.quiz)
                     initQuiz()
                 }
 
                 3 -> {
-                    setContentView(R.layout.stufe4_online)
+                    setContentView(R.layout.culuture_experinece)
+                    initCultureExperinece()
                 }
 
                 4 -> {
-
+                    setContentView(R.layout.win_screen)
                 }
             }
             updatePlayerStatusInDBLogOf()
 
         }
     }
+
+
+
     private fun updatePlayerStatusInDBLogOf(){
         if (DataStore.player1OR2 && player1IsReady){
             DataStore.answer = hashMapOf(
@@ -220,50 +242,63 @@ class Board : AppCompatActivity(){
     }
 
 
-    // ErignisKarte
-    private fun initEreignisKarte() {
+    // Event Card
+    private fun initEventCard() {
         buttonWeiterEreigniskarte = findViewById(R.id.buttonWeiterEreigniskarte)
         buttonWeiterEreigniskarte.setOnClickListener {
-            initZweiteEtappe()
+            initAnswerInput()
         }
     }
 
 
-    // ZweiteEtappe
-    private fun initZweiteEtappe() {
-        setContentView(R.layout.zweite_etappe_online)
+    // Answer Input
+    private fun initAnswerInput() {
+        setContentView(R.layout.answer_input)
         weiterButton = findViewById(R.id.Weiter)
         ediTextStoryInput = findViewById(R.id.ediTextStoryInput)
 
         weiterButton.setOnClickListener {
             ediTextInput = ediTextStoryInput.text.toString()
             setStoryText()
-            setContentView(R.layout.bewertung_online)
-            initRaingOnline()
+            setContentView(R.layout.rating_online)
+            initRating()
         }
     }
 
     private fun setStoryText() {
-        if (DataStore.player1OR2) {
-            DataStore.answer = hashMapOf(
-                "storyText1" to ediTextInput,
-            )
-            DataStore.updateAnswerInDB()
-        } else {
-            DataStore.answer= hashMapOf(
-                "storyText2" to ediTextInput,
-            )
-            DataStore.updateAnswerInDB()
-        }
+        if (DataStore.stage == 1) {
+            if (DataStore.player1OR2) {
+                DataStore.answer = hashMapOf(
+                    "storyText1" to ediTextInput ,
+                )
+                DataStore.updateAnswerInDB()
+            } else {
+                DataStore.answer = hashMapOf(
+                    "storyText2" to ediTextInput ,
+                )
+                DataStore.updateAnswerInDB()
+            }
+        }else
+            if (DataStore.player1OR2) {
+                DataStore.answer = hashMapOf(
+                    "cultureText1" to ediTextInput ,
+                )
+                DataStore.updateAnswerInDB()
+            } else {
+                DataStore.answer = hashMapOf(
+                    "cultureText2" to ediTextInput ,
+                )
+                DataStore.updateAnswerInDB()
+            }
 
     }
 
 
 
 
-    // BewertungOnline
+    // Rating
 
-    private fun initRaingOnline() {
+    private fun initRating() {
         ratingBewertung = findViewById(R.id.ratingBewertung)
         buttonWeiterBewertung = findViewById(R.id.WeiterButtonBewertung)
         textViewInputVonMitspieler = findViewById(R.id.textViewInputVonMitspieler)
@@ -274,11 +309,11 @@ class Board : AppCompatActivity(){
             buttonWeiterBewertung.visibility = View.INVISIBLE
         }
         buttonWeiterBewertung.setOnClickListener {
-            checkBewertung()
+            checkRating()
         }
     }
 
-    private fun checkBewertung() {
+    private fun checkRating() {
         val pointsFromRating = ratingBewertung.rating.toInt()
         if (pointsFromRating == 0) {
             DataStore.chosenPopout = mutableListOf(getString(R.string.no_rating),getString(R.string.no_rating_explained))
@@ -298,15 +333,25 @@ class Board : AppCompatActivity(){
                 DataStore.updateAnswerInDB()
                 DataStore.currentPoints2 += pointsFromRating
             }
+            ratingIsInitalised = false
+            thereIsTheStoryInput = false
             initBoard()
         }
     }
 
     private fun setDisplayedText(){
-        if (DataStore.player1OR2){
-            textViewInputVonMitspieler.text = storyText2
+        if(DataStore.stage == 1) {
+            if (DataStore.player1OR2) {
+                textViewInputVonMitspieler.text = storyText2
+            } else {
+                textViewInputVonMitspieler.text = storyText1
+            }
         }else{
-            textViewInputVonMitspieler.text = storyText1
+            if (DataStore.player1OR2) {
+                textViewInputVonMitspieler.text = cultureText2
+            } else {
+                textViewInputVonMitspieler.text = cultureText1
+            }
         }
         buttonWeiterBewertung.visibility = View.VISIBLE
         buttonWeiterBewertung.text = getString(R.string.bewertung_abgeben)
@@ -463,6 +508,14 @@ class Board : AppCompatActivity(){
             button?.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(this, R.color.grey)
             )
+        }
+    }
+
+    // Culture Experinece
+    private fun initCultureExperinece() {
+        cultureContinue = findViewById(R.id.cultureContinue)
+        cultureContinue.setOnClickListener {
+            initAnswerInput()
         }
     }
 }

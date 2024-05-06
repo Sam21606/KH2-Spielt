@@ -71,7 +71,6 @@
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#1F1D47"
         android:gravity="center"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
