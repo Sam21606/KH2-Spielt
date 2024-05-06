@@ -1,6 +1,14 @@
 package com.example.projekt
 
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
 
 object DataStore {
@@ -24,6 +32,7 @@ object DataStore {
     var choosenAvatar1 = 1
     var choosenAvatar2 = 1
     val images = listOf(R.drawable.person_blue_no_background, R.drawable.person_green_no_background, R.drawable.person_red_no_background, R.drawable.person_turkis_no_background, R.drawable.person_yellow_no_background)
+    var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
 
 
@@ -78,6 +87,24 @@ object DataStore {
                 Log.e("Database", "Failed to update the database.")
             }
     }
+    fun popout(context: Context) {
+        val popout = Dialog(context)
+        val popoutNoInput = LayoutInflater.from(context).inflate(R.layout.popout_template, null)
+        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
+        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
+        popoutText.text = chosenPopout[0]
+        popoutTitle.text = chosenPopout[1]
+        popout.setContentView(popoutNoInput)
+        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
+        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
+        popout.show()
+        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
+        popoutButton.setOnClickListener {
+            popout.dismiss()
+        }
+    }
+
 }
 
 

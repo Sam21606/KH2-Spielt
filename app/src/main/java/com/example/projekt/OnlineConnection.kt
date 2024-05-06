@@ -1,18 +1,13 @@
 package com.example.projekt
 
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +24,6 @@ class OnlineConnection : AppCompatActivity() {
     private lateinit var clipboardManager: ClipboardManager
     private lateinit var continueGame : Button
     private lateinit var toggleButtonPlayerNumberInput : ToggleButton
-    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,11 +111,11 @@ class OnlineConnection : AppCompatActivity() {
             db.collection("Games").document(editTextIDInput.text.toString())
                 .get()
                 .addOnFailureListener {
-                    chosenPopout = mutableListOf(
+                    DataStore.chosenPopout = mutableListOf(
                         getString(R.string.wrongID) ,
                         getString(R.string.wrongIDExplained)
                     )
-                    popout()
+                    DataStore.popout(this)
                 }
                 .addOnSuccessListener { result ->
                     if (result != null) {
@@ -134,19 +128,19 @@ class OnlineConnection : AppCompatActivity() {
                         val intent = Intent(this, Veranstaltungswahl::class.java)
                         startActivity(intent)
                     }else{
-                        chosenPopout = mutableListOf(
+                        DataStore.chosenPopout = mutableListOf(
                             getString(R.string.wrongID) ,
                             getString(R.string.wrongIDExplained)
                         )
-                        popout()
+                        DataStore.popout(this)
                     }
                 }
         }else{
-            chosenPopout = mutableListOf(
+            DataStore.chosenPopout = mutableListOf(
                 getString(R.string.wrongID) ,
                 getString(R.string.wrongIDExplained)
             )
-            popout()
+            DataStore.popout(this)
         }
     }
 
@@ -156,11 +150,11 @@ class OnlineConnection : AppCompatActivity() {
             db.collection("Games").document(editTextIDInput.text.toString())
                 .get()
                 .addOnFailureListener {
-                    chosenPopout = mutableListOf(
+                    DataStore.chosenPopout = mutableListOf(
                         getString(R.string.wrongID) ,
                         getString(R.string.wrongIDExplained)
                     )
-                    popout()
+                    DataStore.popout(this)
                 }
                 .addOnSuccessListener { result ->
                     if (result != null) {
@@ -175,37 +169,20 @@ class OnlineConnection : AppCompatActivity() {
                         val intent = Intent(this , Board::class.java)
                         startActivity(intent)
                     }else{
-                        chosenPopout = mutableListOf(
+                        DataStore.chosenPopout = mutableListOf(
                             getString(R.string.wrongID) ,
                             getString(R.string.wrongIDExplained)
                         )
-                        popout()
+                        DataStore.popout(this)
                     }
                 }
         }else{
-            chosenPopout = mutableListOf(
+            DataStore.chosenPopout = mutableListOf(
                 getString(R.string.wrongID) ,
                 getString(R.string.wrongIDExplained)
             )
-            popout()
+            DataStore.popout(this)
         }
     }
 
-    private fun popout(){
-        val popout = Dialog(this)
-        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
-        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
-        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
-        popoutText.text = chosenPopout[1]
-        popoutTitle.text = chosenPopout[0]
-        popout.setContentView(popoutNoInput)
-        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-        popout.show()
-        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener {
-            popout.dismiss()
-        }
-    }
 }

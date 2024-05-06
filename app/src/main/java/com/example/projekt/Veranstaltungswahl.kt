@@ -1,12 +1,8 @@
 package com.example.projekt
 
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
@@ -38,7 +34,6 @@ class Veranstaltungswahl : AppCompatActivity() {
     private lateinit var checkAusstellung: CheckBox
     private lateinit var textViewPlayerName: TextView
     private var db = FirebaseFirestore.getInstance()
-    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +55,7 @@ class Veranstaltungswahl : AppCompatActivity() {
         checkOper = findViewById(R.id.checkOper)
         checkAusstellung = findViewById(R.id.checkAusstellung)
         textViewPlayerName = findViewById(R.id.textViewPlayerName)
+        DataStore.chosenPopout = mutableListOf(getString(R.string.no_topic), getString(R.string.no_topic_explained))
 
         setListener(
             checkAusstellung,
@@ -113,7 +109,7 @@ class Veranstaltungswahl : AppCompatActivity() {
     private fun popoutWhenNoInputElseNewLayout() {
         if (DataStore.player1OR2) {
             if (!ausstellung1 && !lesung1 && !konzert1 && !oper1 && !performance1 && !theater1) {
-                popout()
+                DataStore.popout(this)
             } else {
                 if (DataStore.gameMode){
                     checkboxCheck()
@@ -126,7 +122,7 @@ class Veranstaltungswahl : AppCompatActivity() {
             }
         } else {
             if (!ausstellung2 && !lesung2 && !konzert2 && !oper2 && !performance2 && !theater2) {
-                popout()
+                DataStore.popout(this)
             } else {
                 checkboxCheck()
                 checkIfThereIsTopicFromFirebase()
@@ -288,10 +284,6 @@ class Veranstaltungswahl : AppCompatActivity() {
         DataStore.questionsPicked.random()
     }
 
-
-
-
-
     private fun resetView() {
         checkAusstellung.isChecked = false
         checkLesung.isChecked = false
@@ -300,25 +292,6 @@ class Veranstaltungswahl : AppCompatActivity() {
         checkPerformance.isChecked = false
         checkTheater.isChecked = false
         textViewPlayerName.text = DataStore.playerName2
-    }
-
-    private fun popout(){
-        chosenPopout = mutableListOf(getString(R.string.no_topic), getString(R.string.no_topic_explained))
-        val popout = Dialog(this)
-        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
-        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
-        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
-        popoutText.text = chosenPopout[1]
-        popoutTitle.text = chosenPopout[0]
-        popout.setContentView(popoutNoInput)
-        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-        popout.show()
-        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener {
-            popout.dismiss()
-        }
     }
 }
 

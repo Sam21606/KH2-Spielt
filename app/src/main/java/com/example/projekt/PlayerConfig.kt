@@ -1,12 +1,8 @@
 package com.example.projekt
 
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -30,7 +26,6 @@ class PlayerConfig : AppCompatActivity() {
     private lateinit var nextAvatarR: ImageButton
     private lateinit var nextAvatarL: ImageButton
     private lateinit var avatarImage:ImageView
-    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
     private var currentImage = 0
 
 
@@ -54,7 +49,7 @@ class PlayerConfig : AppCompatActivity() {
         var questionCount = seekBar.progress +1
 
         textViewQuestionCount.text = getString(R.string.fragen_ausgewahlt , questionCount.toString())
-        chosenPopout = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained))
+        DataStore.chosenPopout = mutableListOf(getString(R.string.no_name), getString(R.string.no_name_explained))
         toggleButton.setOnClickListener {
             onlineOfflinechanger()
         }
@@ -109,27 +104,10 @@ class PlayerConfig : AppCompatActivity() {
             val intent2 = Intent(this, Veranstaltungswahl::class.java)
             startActivity(intent2)
         } else {
-            popout()
+            DataStore.popout(this)
         }
     }
 
-    private fun popout(){
-        val popout = Dialog(this)
-        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
-        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
-        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
-        popoutText.text = chosenPopout[1]
-        popoutTitle.text = chosenPopout[0]
-        popout.setContentView(popoutNoInput)
-        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-        popout.show()
-        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener {
-            popout.dismiss()
-        }
-    }
 
 
     private fun onlineOfflinechanger() {

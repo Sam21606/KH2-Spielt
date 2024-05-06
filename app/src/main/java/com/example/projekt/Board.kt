@@ -1,12 +1,8 @@
 package com.example.projekt
 
-import android.app.Dialog
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -47,7 +43,6 @@ class Board : AppCompatActivity(){
 
     private var ediTextInput = ""
     private var db = FirebaseFirestore.getInstance()
-    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
     private lateinit var imagePlayer1 : ImageView
     private lateinit var imagePlayer2 : ImageView
 
@@ -280,8 +275,8 @@ class Board : AppCompatActivity(){
     private fun checkBewertung() {
         val pointsFromRating = ratingBewertung.rating.toInt()
         if (pointsFromRating == 0) {
-            chosenPopout = mutableListOf(getString(R.string.no_rating),getString(R.string.no_rating_explained))
-            popout()
+            DataStore.chosenPopout = mutableListOf(getString(R.string.no_rating),getString(R.string.no_rating_explained))
+            DataStore.popout(this)
         } else {
             DataStore.stage += 1
             if (DataStore.player1OR2) {
@@ -311,24 +306,6 @@ class Board : AppCompatActivity(){
         buttonWeiterBewertung.text = getString(R.string.bewertung_abgeben)
     }
 
-    private fun popout(){
-        val popout = Dialog(this)
-        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
-        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
-        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
-        popoutText.text = chosenPopout[1]
-        popoutTitle.text = chosenPopout[0]
-        popout.setContentView(popoutNoInput)
-        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-        popout.show()
-        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener {
-            popout.dismiss()
-        }
-    }
-
 
     // QUIZ
 
@@ -344,8 +321,8 @@ class Board : AppCompatActivity(){
         nextQuestion()
         quizWeiterOnline.setOnClickListener {
             if (toggleButtonClicked == 0){
-                chosenPopout = mutableListOf(getString(R.string.no_answer), getString(R.string.no_answer_explained))
-                popout()
+                DataStore.chosenPopout = mutableListOf(getString(R.string.no_answer), getString(R.string.no_answer_explained))
+                DataStore.popout(this)
             }else{
                 nextQuestion()
             }
