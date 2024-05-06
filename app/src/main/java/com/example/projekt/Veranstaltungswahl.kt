@@ -265,7 +265,7 @@ class Veranstaltungswahl : AppCompatActivity() {
 
     private fun selectQuestions() {
         var questioNumbers = 0
-        var posibileQuestions: MutableList<Int> = mutableListOf()
+        val posibileQuestions: MutableList<Int> = mutableListOf()
         for (i in 0 until  DataStore.questions.size){
             posibileQuestions.add(questioNumbers)
             questioNumbers += 1
