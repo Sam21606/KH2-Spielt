@@ -31,7 +31,7 @@
     <string name="settings">Einstellung</string>
     <string name="no_name">Keine Name eingegeben</string>
     <string name="no_name_explained">Du musst einen Namen eingeben um spielen zu können</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="no_topic">Keine Veranstaltung gewählt</string>
     <string name="no_topic_explained">Du musst mindestens eine Veranstaltung wählen um spielen zu können</string>
     <string name="no_answer">Keine Antwort abgegeben</string>
