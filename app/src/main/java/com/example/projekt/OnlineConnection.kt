@@ -164,7 +164,12 @@ class OnlineConnection : AppCompatActivity() {
                         DataStore.playerName1 = result.getString("playerName1").toString()
                         DataStore.playerName2 = result.getString("playerName2").toString()
                         DataStore.questionCount = result.getLong("questionCount")!!.toInt()
-                        DataStore.questionsPicked = (result.get("questionsPicked") as? MutableList<Int>)!!
+                        val questionsPicked = result.get("questionsPicked")
+                        if (questionsPicked is MutableList<*>) {
+                            DataStore.questionsPicked = questionsPicked.filterIsInstance<Int>().toMutableList()
+                        } else {
+                            DataStore.questionsPicked = mutableListOf()
+                        }
                         DataStore.stage = result.getLong("stage")!!.toInt()
                         val intent = Intent(this , Board::class.java)
                         startActivity(intent)
