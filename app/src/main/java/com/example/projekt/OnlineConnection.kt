@@ -165,9 +165,9 @@ class OnlineConnection : AppCompatActivity() {
                         DataStore.playerName2 = result.getString("playerName2").toString()
                         DataStore.questionCount = result.getLong("questionCount")!!.toInt()
                         val questionsPicked = result.get("questionsPicked")
-                        if (questionsPicked is MutableList<*>) {
+                        if (questionsPicked is MutableList<*>) {// für denn Fall das nicht alles den Type INT hat
                             DataStore.questionsPicked = questionsPicked.filterIsInstance<Int>().toMutableList()
-                        } else {
+                        } else{
                             DataStore.questionsPicked = mutableListOf()
                         }
                         DataStore.stage = result.getLong("stage")!!.toInt()

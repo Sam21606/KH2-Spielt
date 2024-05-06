@@ -1,12 +1,7 @@
 package com.example.projekt
-
-import android.app.Dialog
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -15,12 +10,12 @@ import androidx.core.content.ContextCompat
 
 class QuizOffline : AppCompatActivity() {
     private lateinit var quizWeiterOnline: Button
-    private lateinit var buttonAnswer1Online: ToggleButton // inizieert die einzelnen Buttons sodass sie im code aufrufbar sind aber noch keinen Value besitzten
+    private lateinit var buttonAnswer1Online: ToggleButton
     private lateinit var buttonAnswer2Online: ToggleButton
     private lateinit var buttonAnswer3Online: ToggleButton
     private lateinit var buttonAnswer4Online: ToggleButton
     private lateinit var textViewFrageQuiz: TextView
-    private lateinit var playerName : TextView
+    private lateinit var playerName: TextView
     private var questionNumber = 0
     private var questionID: String = ""
     private var clickedAnswerID = "0"
@@ -29,20 +24,23 @@ class QuizOffline : AppCompatActivity() {
     private lateinit var answer2Text: String
     private lateinit var answer3Text: String
     private lateinit var answer4Text: String
-    private var questionsChosen = mutableListOf("")
+    private var questionsChosen = mutableListOf<String>()
     private var matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
     private var matchAnswersText = matchedAnswers.map { it.text }
     private var matchAnswersId = matchedAnswers.map { it.ID }
     private var choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID }
     private var correctAnswer = matchedAnswers.filter { it.correct == "true" }
     private var toggleButtonClicked = 0
-    private var chosenPopout : MutableList <String> = mutableListOf() // erste Stelle Titel zweite Stelle Erklärung
-
+    private val buttonTintMap = mapOf(
+        1 to R.color.highlightedGrey,
+        2 to R.color.grey,
+        3 to R.color.grey,
+        4 to R.color.grey
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_online)
-
         init()
     }
 
@@ -55,76 +53,67 @@ class QuizOffline : AppCompatActivity() {
         buttonAnswer4Online = findViewById(R.id.buttonAnswer4Online)
         textViewFrageQuiz = findViewById(R.id.textViewFrageQuiz)
         playerName = findViewById(R.id.playerName)
-
         playerName.text = DataStore.playerName1
+
         nextQuestion()
         quizWeiterOnline.setOnClickListener {
-            if (toggleButtonClicked == 0){
-                chosenPopout = mutableListOf(getString(R.string.no_answer), getString(R.string.no_answer_explained))
-                popout()
-            }else{
+            if (toggleButtonClicked == 0) {
+                DataStore.chosenPopout = mutableListOf(getString(R.string.no_answer), getString(R.string.no_answer_explained))
+               DataStore.popout(this)
+            } else {
                 nextQuestion()
             }
         }
         buttonAnswer1Online.setOnClickListener {
-            button1Clicked()
+            buttonClicked(1)
         }
         buttonAnswer2Online.setOnClickListener {
-            button2Clicked()
+            buttonClicked(2)
         }
         buttonAnswer3Online.setOnClickListener {
-            button3Clicked()
+            buttonClicked(3)
         }
         buttonAnswer4Online.setOnClickListener {
-            button4Clicked()
+            buttonClicked(4)
         }
-
     }
+
     private fun nextQuestion() {
         toggleButtonClicked = 0
         changeToggleButtonStyle()
-        //Prüft ob noch eine neue Frage angezeigt werden muss
-        if (questionNumber == DataStore.questionCount * 2) {//questionCount = Anzahl an Fragen pro Spieler
+        if (questionNumber == DataStore.questionCount * 2) {
             addPoints()
             DataStore.player1OR2 = true
-            intent = Intent(this, Spielbrett::class.java)
-            startActivity(intent)
-        }else if (questionNumber != 0) {
-            // Löst neuen Fragevorgang aus
+            startActivity(Intent(this, Spielbrett::class.java))
+        } else if (questionNumber != 0) {
             addPoints()
             selectQuestion()
             toggleButtonClicked = 0
-        }else{
-            // Löst ersten Fragevorgang aus
+        } else {
             selectQuestion()
         }
-
     }
 
     private fun addPoints() {
-        //Prüft ob Antwort stimmt
         if (choosenanswer == correctAnswer) {
-            if (questionNumber == DataStore.questionCount + 1){
+            if (questionNumber == DataStore.questionCount + 1) {
                 DataStore.player1OR2 = false
-            }else if (questionNumber == DataStore.questionCount){
+            } else if (questionNumber == DataStore.questionCount) {
                 playerName.text = DataStore.playerName2
             }
             if (DataStore.player1OR2) {
-                DataStore.currentPoints1 += 1
+                DataStore.currentPoints1++
             } else {
-                DataStore.currentPoints2 += 1
+                DataStore.currentPoints2++
             }
         }
     }
 
     private fun selectQuestion() {
-        // remove current question from DS
         setNewRandomQuestion()
         setTextEtcToChosenQuestio()
-        questionNumber += 1
+        questionNumber++
     }
-
-
 
     private fun setNewRandomQuestion() {
         questionID = DataStore.questions[DataStore.questionsPicked[questionNumber]].ID
@@ -133,9 +122,6 @@ class QuizOffline : AppCompatActivity() {
     }
 
     private fun setTextEtcToChosenQuestio() {
-        // setzt den text der Buttons zu Fragen und Antwort
-
-        //Speichert Fragen und Antworten in einzelnen Variabeln
         matchedAnswers = DataStore.answers.filter { it._QuestionID == questionID }
         matchAnswersText = matchedAnswers.map { it.text }
         matchAnswersId = matchedAnswers.map { it.ID }
@@ -143,114 +129,42 @@ class QuizOffline : AppCompatActivity() {
         correctAnswer = matchedAnswers.filter { it.correct == "true" }
         questionsChosen.add(questionID)
 
-        // Definiert Variable mit dem Text
         answer1Text = matchAnswersText[0]
         answer2Text = matchAnswersText[1]
         answer3Text = matchAnswersText[2]
         answer4Text = matchAnswersText[3]
 
-        // Definiert Text der Buttons
-        buttonAnswer1Online.textOff = answer1Text
         buttonAnswer1Online.text = answer1Text
-        buttonAnswer1Online.textOn = answer1Text
-        buttonAnswer2Online.textOff = answer2Text
         buttonAnswer2Online.text = answer2Text
-        buttonAnswer2Online.textOn = answer2Text
-        buttonAnswer3Online.textOff = answer3Text
         buttonAnswer3Online.text = answer3Text
-        buttonAnswer3Online.textOn = answer3Text
-        buttonAnswer4Online.textOff = answer4Text
         buttonAnswer4Online.text = answer4Text
-        buttonAnswer4Online.textOn = answer4Text
     }
-    private fun button1Clicked() {
-        toggleButtonClicked = 1
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[0]
+
+    private fun buttonClicked(buttonNumber: Int) {
+        toggleButtonClicked = buttonNumber
+        changeToggleButtonStyle(toggleButtonClicked)
+        clickedAnswerID = matchAnswersId[buttonNumber - 1]
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer")
     }
 
-
-
-    private fun button2Clicked() {
-        toggleButtonClicked = 2
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[1]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID  }
-        println ("teeeeeeeeest $choosenanswer")
-    }
-
-    private fun button3Clicked() {
-        toggleButtonClicked = 3
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[2]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer $clickedAnswerID $matchedAnswers")
-    }
-
-    private fun button4Clicked() {
-        toggleButtonClicked = 4
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[3]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-        println ("teeeeeeeeest $choosenanswer")
-    }
-
-    private fun changeToggleButtonStyle() {
-        when (toggleButtonClicked){
-            0->{
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+    private fun changeToggleButtonStyle(toggleButtonClicked: Int? = null) {
+        buttonTintMap.forEach { (buttonNumber, colorResId) ->
+            val button = when (buttonNumber) {
+                1 -> buttonAnswer1Online
+                2 -> buttonAnswer2Online
+                3 -> buttonAnswer3Online
+                4 -> buttonAnswer4Online
+                else -> null
             }
-            1 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+            val color = if (buttonNumber == toggleButtonClicked) {
+                colorResId
+            } else {
+                R.color.grey
             }
-            2 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-
-            }
-            3 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-
-            }
-            4 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-
-            }
-
+            button?.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(this, color)
+            )
         }
     }
 
-    private fun popout(){
-        val popout = Dialog(this)
-        val popoutNoInput = layoutInflater.inflate(R.layout.popout_template, null)
-        val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
-        val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
-        popoutText.text = chosenPopout[1]
-        popoutTitle.text = chosenPopout[0]
-        popout.setContentView(popoutNoInput)
-        popout.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        popout.window?.attributes?.width = WindowManager.LayoutParams.MATCH_PARENT
-        popout.window?.attributes?.height = WindowManager.LayoutParams.MATCH_PARENT
-        popout.show()
-        val popoutButton = popoutNoInput.findViewById<Button>(R.id.popoutButton)
-        popoutButton.setOnClickListener {
-            popout.dismiss()
-        }
-    }
 }

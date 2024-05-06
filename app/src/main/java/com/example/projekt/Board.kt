@@ -14,43 +14,40 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Board : AppCompatActivity(){
+    // Variables related to the board
     private lateinit var textViewStufe: TextView
+    private lateinit var textViewPlayer1: TextView
+    private lateinit var textViewPlayer2: TextView
+    private lateinit var imagePlayer1: ImageView
+    private lateinit var imagePlayer2: ImageView
+    private lateinit var buttonSpielbrett: Button
+
     private var storyText1 = "Warte auf Eingabe"
     private var storyText2 = "Warte auf Eingabe"
     private var playerCanContinue = false
     private var player1IsReady = false
     private var player2IsReady = false
-
     private var currentPoints1Before = 0
     private var currentPoints2Before = 0
-
     private var thereIsTheStoryInput = false
     private var ratingIsInitalised = false
+    private lateinit var ediTextStoryInput: TextInputEditText
+    private var ediTextInput = ""
 
-    private lateinit var buttonSpielbrett: Button
-    private lateinit var textViewPlayer1: TextView
-    private lateinit var textViewPlayer2 : TextView
+    // Variables related to Ereigniskarte
+    private lateinit var buttonWeiterEreigniskarte: Button
 
+    // Variables related to ZweiteEtappe
+    private lateinit var weiterButton: Button
+
+    // Variables related to rating
     private lateinit var ratingBewertung: RatingBar
     private lateinit var buttonWeiterBewertung: Button
     private lateinit var textViewInputVonMitspieler: TextView
 
-    private lateinit var buttonWeiterEreigniskarte : Button
-
-    private lateinit var weiterButton : Button
-    private lateinit var ediTextStoryInput : TextInputEditText
-
-
-    private var ediTextInput = ""
-    private var db = FirebaseFirestore.getInstance()
-    private lateinit var imagePlayer1 : ImageView
-    private lateinit var imagePlayer2 : ImageView
-
-
-
-    // QUIZ
+    // Variables related to quiz
     private lateinit var quizWeiterOnline: Button
-    private lateinit var buttonAnswer1Online: ToggleButton // inizieert die einzelnen Buttons sodass sie im code aufrufbar sind aber noch keinen Value besitzten
+    private lateinit var buttonAnswer1Online: ToggleButton
     private lateinit var buttonAnswer2Online: ToggleButton
     private lateinit var buttonAnswer3Online: ToggleButton
     private lateinit var buttonAnswer4Online: ToggleButton
@@ -71,6 +68,15 @@ class Board : AppCompatActivity(){
     private var choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID }
     private var correctAnswer = matchedAnswers.filter { it.correct == "true" }
     private var toggleButtonClicked = 0
+    private val buttonTintMap = mapOf(
+        1 to R.color.highlightedGrey,
+        2 to R.color.grey,
+        3 to R.color.grey,
+        4 to R.color.grey
+    )
+
+    // Firebase
+    private var db = FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -328,16 +334,16 @@ class Board : AppCompatActivity(){
             }
         }
         buttonAnswer1Online.setOnClickListener {
-            button1Clicked()
+            buttonClicked(1)
         }
         buttonAnswer2Online.setOnClickListener {
-            button2Clicked()
+            buttonClicked(2)
         }
         buttonAnswer3Online.setOnClickListener {
-            button3Clicked()
+            buttonClicked(3)
         }
         buttonAnswer4Online.setOnClickListener {
-            button4Clicked()
+            buttonClicked(4)
         }
 
     }
@@ -409,85 +415,54 @@ class Board : AppCompatActivity(){
         answer4Text = matchAnswersText[3]
 
         // Definiert Text der Buttons
-        buttonAnswer1Online.textOff = answer1Text
         buttonAnswer1Online.text = answer1Text
-        buttonAnswer1Online.textOn = answer1Text
-        buttonAnswer2Online.textOff = answer2Text
         buttonAnswer2Online.text = answer2Text
-        buttonAnswer2Online.textOn = answer2Text
-        buttonAnswer3Online.textOff = answer3Text
         buttonAnswer3Online.text = answer3Text
-        buttonAnswer3Online.textOn = answer3Text
-        buttonAnswer4Online.textOff = answer4Text
         buttonAnswer4Online.text = answer4Text
-        buttonAnswer4Online.textOn = answer4Text
     }
 
-    private fun button1Clicked() {
-        toggleButtonClicked = 1
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[0]
+    private fun buttonClicked(buttonNumber: Int) {
+        // Handle button click for quiz answers
+        val clickedAnswerID = when (buttonNumber) {
+            1 -> matchAnswersId[0]
+            2 -> matchAnswersId[1]
+            3 -> matchAnswersId[2]
+            4 -> matchAnswersId[3]
+            else -> ""
+        }
         choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
+        toggleButtonClicked = buttonNumber
+        changeToggleButtonStyle(toggleButtonClicked)
     }
 
-    private fun button2Clicked() {
-        toggleButtonClicked = 2
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[1]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID  }
-    }
-
-    private fun button3Clicked() {
-        toggleButtonClicked = 3
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[2]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-    }
-
-    private fun button4Clicked() {
-        toggleButtonClicked = 4
-        changeToggleButtonStyle()
-        clickedAnswerID = matchAnswersId[3]
-        choosenanswer = matchedAnswers.filter { clickedAnswerID == it.ID && it._QuestionID == questionID }
-    }
-
-    private fun changeToggleButtonStyle() {
-        when (toggleButtonClicked){
-            0->{
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+    private fun changeToggleButtonStyle(toggleButtonClicked: Int) {
+        buttonTintMap.forEach { (buttonNumber, colorResId) ->
+            val button = when (buttonNumber) {
+                1 -> buttonAnswer1Online
+                2 -> buttonAnswer2Online
+                3 -> buttonAnswer3Online
+                4 -> buttonAnswer4Online
+                else -> null
             }
-            1 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+            button?.backgroundTintList = if (buttonNumber == toggleButtonClicked) {
+                ColorStateList.valueOf(ContextCompat.getColor(this, colorResId))
+            } else {
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
             }
-            2 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-
-            }
-            3 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-
-            }
-            4 -> {
-                buttonAnswer1Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer2Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer3Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
-                buttonAnswer4Online.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.highlightedGrey))
-
-            }
-
         }
     }
-
+    private fun changeToggleButtonStyle() {
+        buttonTintMap.forEach { (buttonNumber, _) ->
+            val button = when (buttonNumber) {
+                1 -> buttonAnswer1Online
+                2 -> buttonAnswer2Online
+                3 -> buttonAnswer3Online
+                4 -> buttonAnswer4Online
+                else -> null
+            }
+            button?.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(this, R.color.grey)
+            )
+        }
+    }
 }
