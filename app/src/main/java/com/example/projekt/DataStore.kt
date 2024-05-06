@@ -1,11 +1,14 @@
 package com.example.projekt
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -92,7 +95,8 @@ object DataStore {
     }
     fun popout(context: Context) {
         val popout = Dialog(context)
-        val popoutNoInput = LayoutInflater.from(context).inflate(R.layout.popout_template, null)
+        val parentView = (context as? Activity)?.findViewById<View>(android.R.id.content)
+        val popoutNoInput = LayoutInflater.from(context).inflate(R.layout.popout_template, parentView as? ViewGroup , false)
         val popoutText = popoutNoInput.findViewById<TextView>(R.id.popoutText)
         val popoutTitle = popoutNoInput.findViewById<TextView>(R.id.popoutTitle)
         popoutText.text = chosenPopout[0]
