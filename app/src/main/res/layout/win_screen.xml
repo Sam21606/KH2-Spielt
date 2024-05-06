@@ -16,5 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.496"
-        app:srcCompat="@drawable/youwin" />
+        app:srcCompat="@drawable/youwin"
+        android:contentDescription="@string/you_win" />
 </androidx.constraintlayout.widget.ConstraintLayout>

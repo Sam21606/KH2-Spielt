@@ -59,4 +59,7 @@
     <string name="player_1">Player 1</string>
     <string name="player_2">Player 2</string>
     <string name="fragen_ausgewahlt">%1$s Fragen ausgewählt</string>
+    <string name="you_win">You Win</string>
+    <string name="Event_Card">Stell Dir vor du begenest deinem Alten Mathe Lehrer</string>
+    <string name="culture_card">Was war das beste Theaterstück das du je gesehen hast</string>
 </resources>
