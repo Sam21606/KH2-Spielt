@@ -77,8 +77,8 @@ class Board : AppCompatActivity(){
 
     // Culture Experinece
     private lateinit var cultureContinue: Button
-    var cultureText1 = ""
-    var cultureText2 = ""
+    private var cultureText1 = ""
+    private var cultureText2 = ""
 
     // Firebase
     private var db = FirebaseFirestore.getInstance()
@@ -464,6 +464,14 @@ class Board : AppCompatActivity(){
         buttonAnswer2Online.text = answer2Text
         buttonAnswer3Online.text = answer3Text
         buttonAnswer4Online.text = answer4Text
+        buttonAnswer1Online.textOff = answer1Text
+        buttonAnswer2Online.textOff = answer2Text
+        buttonAnswer3Online.textOff = answer3Text
+        buttonAnswer4Online.textOff = answer4Text
+        buttonAnswer1Online.textOn = answer1Text
+        buttonAnswer2Online.textOn = answer2Text
+        buttonAnswer3Online.textOn = answer3Text
+        buttonAnswer4Online.textOn = answer4Text
     }
 
     private fun buttonClicked(buttonNumber: Int) {

@@ -49,7 +49,6 @@ class OnlineConnection : AppCompatActivity() {
                 startActivity(intent)
             }else if (buttonConnectGameClicked == 0){
                 DataStore.playerName2 = DataStore.playerName1
-                DataStore.playerName1 = ""
                 buttonConnectGame.text = getString(R.string.checkID)
                 buttonCreateGame.visibility = View.INVISIBLE
                 editTextIDInput.visibility = View.VISIBLE
