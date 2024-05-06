@@ -36,9 +36,10 @@ object DataStore {
 
 
 
-    private var db = FirebaseFirestore.getInstance()
+
 
     fun logQuestionAnswers() {
+        val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("Question") // bekommt path zur richtigen collection
         docRef.get() // lädt diese collection herunter
             .addOnFailureListener {
@@ -73,6 +74,7 @@ object DataStore {
     }
 
     fun createGame() {
+        val db = FirebaseFirestore.getInstance()
         db.collection("Games")
             .add(gameData)
             .addOnSuccessListener { documentReference ->
@@ -81,6 +83,7 @@ object DataStore {
     }
 
     fun updateAnswerInDB(){
+        val db = FirebaseFirestore.getInstance()
         db.collection("Games").document(gameID)
             .update(answer)
             .addOnFailureListener {
