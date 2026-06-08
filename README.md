@@ -1,2 +1,2 @@
 # KH2-Spielt
-Aus diesem Projekt wird eine App von dem Brettspiel von Kulturisten hoch 2 erstellt, durch welche Jugendliche mit Senior*innen spielen können
+Die [Kulturisten Hoch 2](https://kulturisten-hoch2.de/) sind eine Initative die versucht einen Kontank zwischen Schülern und Senioren herzustellen. Gemeinsame Treffen und auch Nachhilfe bei der Technik. Im Rahmen dieses Projektes gab es die Idee ein Brettspiel dieser Initative als Android App umzusetzten. 
